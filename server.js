@@ -11,6 +11,7 @@ dotenv.config({ path: "./config/config.env" });
 connectDB();
 
 const users = require("./routes/users");
+const posts = require("./routes/posts");
 
 const app = express();
 
@@ -18,6 +19,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/users", users);
+app.use("/api/posts", posts);
 
 const PORT = process.env.PORT || 5000;
 
