@@ -1,4 +1,5 @@
 const express = require("express");
+const fileUpload = require("express-fileupload");
 
 const dotenv = require("dotenv");
 
@@ -14,6 +15,9 @@ const users = require("./routes/users");
 const posts = require("./routes/posts");
 
 const app = express();
+
+// fileUpload
+app.use(fileUpload());
 
 // Body parser
 app.use(express.json());
