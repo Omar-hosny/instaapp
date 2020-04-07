@@ -20,14 +20,14 @@ const Profile = ({ auth, post, getPosts, createPost, history }) => {
   const [fileName, setFileName] = useState("Choose photo");
   const [error, setError] = useState("");
 
-  const onFileChange = e => {
+  const onFileChange = (e) => {
     setFile(e.target.files[0]);
     setFileName(e.target.files[0].name);
   };
 
-  const onCaptionChange = e => setCaption(e.target.value);
+  const onCaptionChange = (e) => setCaption(e.target.value);
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("file", file);
@@ -104,13 +104,14 @@ const Profile = ({ auth, post, getPosts, createPost, history }) => {
       {/* <!-- show posts that user made --> */}
       <div className="row mt-5">
         {post.posts &&
-          post.posts.map(post =>
+          post.posts.map((post) =>
             post.userId === auth.user._id ? (
               <div className="col-md-4 post-profile mt-3" key={post._id}>
                 <img src={post.photo && `uploads/${post.photo}`} alt="" />
               </div>
             ) : null
           )}
+
         {/* 
           <div class="col-md-4 post-profile">
             <img
@@ -133,11 +134,11 @@ Profile.propTypes = {
   getPosts: PropTypes.func.isRequired,
   createPost: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   post: state.post,
-  auth: state.auth
+  auth: state.auth,
 });
 export default connect(mapStateToProps, { getPosts, createPost })(Profile);

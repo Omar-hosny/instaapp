@@ -35,18 +35,18 @@ router.post("/register", async (req, res) => {
     const user = await User.create({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
     });
 
     res.status(201).json({
       success: true,
-      data: user
+      data: user,
     });
   } catch (err) {
     console.error(err.message);
     res.status(400).json({
       success: false,
-      data: err.message
+      data: err.message,
     });
   }
 });
@@ -88,7 +88,7 @@ router.post("/login", async (req, res) => {
     console.error(err);
     res.status(400).json({
       success: false,
-      data: err.message
+      data: err.message,
     });
   }
 });
@@ -96,7 +96,7 @@ router.post("/login", async (req, res) => {
 // @desc    change user avatar (Profile picture)
 // @route   POST /api/users/avatar
 // @access  Private
-router.post("/avatar/:id", verify, async (req, res) => {
+router.post("/edit/profile/:id", verify, async (req, res) => {
   try {
     if (req.user.id !== req.params.id) {
       return res.send("UnAuthorized to change avatar");
@@ -105,42 +105,144 @@ router.post("/avatar/:id", verify, async (req, res) => {
     if (!user) {
       return res.status(404).send("No user found!");
     }
+    // initialise body variable
+    let body = {};
 
-    if (req.files === null) {
-      return res.status(400).send("No Photo uploaded");
+    // check if req.file
+    if (req.files) {
+      // return res.status(400).send("No Photo uploaded");
+
+      // save the photo
+      const file = req.files.file;
+      // console.log(file);
+      file.mv(`client/public/uploads/avatar/${file.name}`, (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send(err);
+        }
+        // res.json({ fileName: file.name, photoPath: `/uploads/${file.name}` });
+      });
+      // make avatar = file.name
+      body.avatar = file.name;
     }
 
-    // save the photo
-    const file = req.files.file;
-    // console.log(file);
-    file.mv(`client/public/uploads/avatar/${file.name}`, err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      }
-      // res.json({ fileName: file.name, photoPath: `/uploads/${file.name}` });
-    });
-
     // make the avatar : name of file
-    req.body.avatar = file.name;
+    // req.body.avatar = file.name;
 
-    // const newUser  = await User.update(req.bode)
-    // const newUser = await User.updateMany({}, { $set: { avatar: req.body } });
-    user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    // bio of user profile
+    body.bio = req.body.bio;
+
+    user = await User.findByIdAndUpdate(req.params.id, body, {
       new: true,
-      runValidators: true
+      runValidators: true,
     });
     await user.save();
 
     res.status(200).json({
       success: true,
-      data: user
+      data: user,
     });
   } catch (err) {
     console.error(err.message);
     res.status(400).json({
       success: false,
-      data: err.message
+      data: err.message,
+    });
+  }
+});
+
+// @desc   make a follow request
+// @route   POST /api/users/follow/:id
+// @access  Private
+router.post("/follow/:id", verify, async (req, res) => {
+  try {
+    const user1 = await User.findById(req.params.id); // the user i want to follow
+    const user = await User.findById(req.user.id); // the logged in user
+    if (!user1) {
+      return res.status(404).send("User not found..");
+    }
+    if (!user) {
+      return res.status(404).send("User not found...");
+    }
+
+    // the logged in user
+    const followerUser = {
+      id: user.id,
+      name: user.name,
+      avatar: user.avatar,
+    };
+
+    // the user i want to follow
+    const followingUser = {
+      id: user1._id,
+      name: user1.name,
+      avatar: user1.avatar,
+    };
+    // console.log(followingUser, followerUser);
+
+    // Check if user already follow
+    if (user1.followers.filter((item) => item.id === req.user.id).length > 0) {
+      return res.status(400).send("already followed that user");
+    } else if (
+      user.following.filter((item) => item.id === req.params.id).length > 0
+    ) {
+      return res.status(400).send("already followed that user");
+    }
+    // push it into followers & following array
+    user1.followers.unshift(followerUser);
+    user.following.unshift(followingUser);
+
+    await user1.save();
+    await user.save();
+    res.status(200).json({
+      success: true,
+      data: { user1, user },
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      data: err.message,
+    });
+  }
+});
+
+// @desc    Remove follow ( Unfollow request)
+// @route   POST /api/users/unfollow/:id
+// @access  Private
+router.post("/unfollow/:id", verify, async (req, res) => {
+  try {
+    const user1 = await User.findById(req.params.id); // the user i want to unfollow
+    const user = await User.findById(req.user.id); // the logged in user
+    if (!user1) {
+      return res.status(404).send("User not found..");
+    }
+    if (!user) {
+      return res.status(404).send("User not found...");
+    }
+    // Check if user already follow
+    if (user1.followers.filter((item) => item.id === user.id).length > 0) {
+      const removeIndex = user1.followers
+        .map((item) => item.id.toString())
+        .indexOf(req.user.id);
+      user1.followers.splice(removeIndex, 1);
+      const removeIndex2 = user.following
+        .map((item) => item.id.toString())
+        .indexOf(req.params.id);
+      user.following.splice(removeIndex2, 1);
+      await user1.save();
+      await user.save();
+    } else {
+      return res.status(400).send("You have not followed that user yet");
+    }
+
+    res.status(200).json({
+      success: true,
+      data: { user, user1 },
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      data: err.message,
     });
   }
 });

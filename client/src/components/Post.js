@@ -5,10 +5,10 @@ import { getPosts, getPost, deletePost } from "../actions/postActions";
 import { Link } from "react-router-dom";
 
 const Post = ({
-  post: { posts, user, loading },
+  post: { posts, user, error, loading },
   auth,
   getPosts,
-  deletePost
+  deletePost,
 }) => {
   useEffect(() => {
     getPosts();
@@ -17,16 +17,16 @@ const Post = ({
   }, []);
 
   if (loading) {
-    return <h1 className="text-center">Loading...</h1>;
-  } else if (posts === null) {
-    return <h1 className="text-center">No posts to show!</h1>;
+    return <h1 className="text-center mt-5">Loading...</h1>;
+  } else if (posts === null || []) {
+    return <h1 className="text-center mt-5">No posts to show!</h1>;
   }
 
   return (
     <div className="container">
       <div className="row">
         {posts &&
-          posts.map(post => (
+          posts.map((post) => (
             <div key={post._id} className="post mx-auto mt-5 mb-5">
               <div className="header">
                 <div className="img-header">
@@ -158,12 +158,12 @@ Post.propTypes = {
   getPosts: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   post: state.post,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { getPosts, deletePost })(Post);

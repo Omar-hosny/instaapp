@@ -23,6 +23,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "no-photo.jpg"
   },
+  bio: {
+    type: String
+  },
+  followers: [],
+  following: [],
+  posts: [],
   createdAt: {
     type: Date,
     default: Date.now
