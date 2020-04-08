@@ -5,11 +5,13 @@ const router = express.Router();
 
 // Load Post model
 const Post = require("../models/Post");
+const User = require("../models/User");
 
 // @desc    Create Post
 // @route   POST /api/posts
 // @access  Private
 router.post("/", verify, async (req, res) => {
+  const user = await User.findById(req.user.id);
   // Set user to user. _id
   req.body.userId = req.user.id;
   // set post name to post Owner which is req.user.name
@@ -17,6 +19,7 @@ router.post("/", verify, async (req, res) => {
 
   // set user to user object
   const { name, email, avatar } = req.user;
+
   req.body.user = { name, email, avatar };
   // console.log(req.user.name);
   try {
@@ -36,7 +39,7 @@ router.post("/", verify, async (req, res) => {
     //   // res.json({ fileName: file.name, photoPath: `/uploads/${file.name}` });
     // });
 
-    file.mv(`client/public/uploads/${file.name}`, err => {
+    file.mv(`client/public/uploads/${file.name}`, (err) => {
       if (err) {
         console.error(err);
         return res.status(500).send(err);
@@ -63,16 +66,17 @@ router.post("/", verify, async (req, res) => {
     req.body.photo = file.name;
 
     const post = await Post.create(req.body);
-    // console.log(file);
+
+    // console.log(posts);
     res.status(200).json({
       success: true,
-      data: post
+      data: post,
     });
   } catch (err) {
     console.error(err.message);
     res.status(400).json({
       success: false,
-      data: err.message
+      data: err.message,
     });
   }
 });
@@ -86,19 +90,19 @@ router.get("/", async (req, res) => {
     if (posts.length === 0) {
       return res.status(404).json({
         success: false,
-        data: "No posts found."
+        data: "No posts found.",
       });
     }
     res.status(200).json({
       success: true,
       count: posts.length,
-      data: posts
+      data: posts,
     });
   } catch (err) {
     console.error(err);
     res.status(400).json({
       success: false,
-      data: err.message
+      data: err.message,
     });
   }
 });
@@ -113,13 +117,13 @@ router.get("/:id", async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: post
+      data: post,
     });
   } catch (err) {
     console.error(err.message);
     res.status(404).json({
       success: false,
-      data: "No posts found!"
+      data: "No posts found!",
     });
   }
 });
@@ -137,7 +141,7 @@ router.put("/:id", verify, async (req, res) => {
     if (!post) {
       return res.status(404).json({
         success: false,
-        data: "That post does not exist.."
+        data: "That post does not exist..",
       });
     }
 
@@ -148,7 +152,7 @@ router.put("/:id", verify, async (req, res) => {
     // get the photo
     const file = req.files.file;
 
-    file.mv(`client/public/uploads/${file.name}`, err => {
+    file.mv(`client/public/uploads/${file.name}`, (err) => {
       if (err) {
         console.error(err);
         return res.status(500).send(err);
@@ -158,23 +162,23 @@ router.put("/:id", verify, async (req, res) => {
 
     const body = {
       photo: file.name,
-      caption: req.body.caption
+      caption: req.body.caption,
     };
 
     post = await Post.findByIdAndUpdate(req.params.id, body, {
       runValidators: true,
-      new: true
+      new: true,
     });
 
     res.status(200).json({
       success: true,
-      data: post
+      data: post,
     });
   } catch (err) {
     console.error(err.message);
     res.status(400).json({
       success: false,
-      data: err.message
+      data: err.message,
     });
   }
 });
@@ -196,13 +200,13 @@ router.delete("/:id", verify, async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: {}
+      data: {},
     });
   } catch (err) {
     console.error(err.message);
     res.status(404).json({
       success: false,
-      data: "No posts found!"
+      data: "No posts found!",
     });
   }
 });

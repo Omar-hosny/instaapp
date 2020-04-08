@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please Enter your name"]
+    required: [true, "Please Enter your name"],
   },
   email: {
     type: String,
@@ -11,28 +11,33 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     match: [
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      "Please add a valid email"
-    ]
+      "Please add a valid email",
+    ],
   },
   password: {
     type: String,
     required: [true, "Please add your password"],
-    minlength: 6
+    minlength: 6,
   },
   avatar: {
     type: String,
-    default: "no-photo.jpg"
+    default: "no-photo.jpg",
   },
   bio: {
-    type: String
+    type: String,
   },
   followers: [],
   following: [],
-  posts: [],
+  posts: [
+    // {
+    //   type: mongoose.Schema.ObjectId,
+    //   ref: "Post",
+    // },
+  ],
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("User", UserSchema);

@@ -13,6 +13,7 @@ connectDB();
 
 const users = require("./routes/users");
 const posts = require("./routes/posts");
+const profile = require("./routes/profile");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(express.json());
 
 app.use("/api/users", users);
 app.use("/api/posts", posts);
+app.use("/api/profile", profile);
 
 const PORT = process.env.PORT || 5000;
 
