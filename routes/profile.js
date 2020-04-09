@@ -24,7 +24,7 @@ router.get("/:id", async (req, res) => {
     }
 
     // check if user have posts to show in their profile
-    const posts = await Post.find();
+    const posts = await Post.find().sort({ createdAt: -1 });
 
     if (posts.map((post) => post.userId === profile._id).length > 0) {
       profile.posts = posts;

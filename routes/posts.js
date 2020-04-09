@@ -67,6 +67,10 @@ router.post("/", verify, async (req, res) => {
 
     const post = await Post.create(req.body);
 
+    const newPost = post;
+    user.posts.unshift(newPost);
+    await user.save();
+
     // console.log(posts);
     res.status(200).json({
       success: true,
@@ -87,7 +91,7 @@ router.post("/", verify, async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const posts = await Post.find().sort({ createdAt: -1 });
-    if (posts.length === 0) {
+    if (posts.length === 0 || !posts) {
       return res.status(404).json({
         success: false,
         data: "No posts found.",
@@ -189,12 +193,23 @@ router.put("/:id", verify, async (req, res) => {
 router.delete("/:id", verify, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post.userId.toString() !== req.user._id.toString()) {
+    if (post.userId.toString() !== req.user.id.toString()) {
       return res.status(401).json("Unauthorized to delete that post");
     }
     if (!post) {
       return res.send("No post found");
     }
+
+    const user = await User.findById(req.user.id);
+
+    if (user.posts.filter((post) => post._id === req.params.id).length === 0) {
+      const removeIndex = user.posts
+        .map((post) => post._id.toString())
+        .indexOf(req.params.id);
+      user.posts.splice(removeIndex, 1);
+    }
+
+    await user.save();
 
     await post.remove();
 
