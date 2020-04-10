@@ -10,7 +10,7 @@ import store from "./store";
 import { Provider } from "react-redux";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import Profile from "./components/Profile";
+import Profile from "./components/Profile/Profile";
 import EditPost from "./components/EditPost";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/authActions";
@@ -35,7 +35,7 @@ const App = () => {
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/edit-post/:id" component={EditPost} />
 
-            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/profile/:id" component={Profile} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
           </Switch>

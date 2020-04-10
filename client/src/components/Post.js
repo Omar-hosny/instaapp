@@ -18,7 +18,7 @@ const Post = ({
 
   if (loading) {
     return <h1 className="text-center mt-5">Loading...</h1>;
-  } else if (posts === null || []) {
+  } else if (posts === null) {
     return <h1 className="text-center mt-5">No posts to show!</h1>;
   }
 
@@ -36,7 +36,9 @@ const Post = ({
                   />
                 </div>
                 <div className="name-header">
-                  <h5>{post.user.name}</h5>
+                  <Link to={`/profile/${post.userId}`}>
+                    <h5>{post.user.name}</h5>
+                  </Link>
                 </div>
 
                 {/* post actions */}

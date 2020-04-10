@@ -2,18 +2,29 @@ import React, { useEffect, useState } from "react";
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getPosts, createPost } from "../actions/postActions";
-import Modal from "./Modal";
+import { getPosts, createPost } from "../../actions/postActions";
+import { getProfile } from "../../actions/profileActions";
 
-const Profile = ({ auth, post, getPosts, createPost, history }) => {
+import Modal from "../Modal";
+import { useParams } from "react-router-dom";
+
+const Profile = ({
+  auth,
+  post,
+  profile: { profile },
+  createPost,
+  getProfile,
+  history,
+}) => {
+  const { id } = useParams();
   useEffect(() => {
+    getProfile(id);
     getPosts();
-
-    if (post.error !== null) {
-      setError(post.error);
-    }
+    // if (post.error !== null) {
+    //   setError(post.error);
+    // }
     // eslint-disable-next-line
-  }, [post.error]);
+  }, []);
 
   const [caption, setCaption] = useState("");
   const [file, setFile] = useState("");
@@ -44,14 +55,16 @@ const Profile = ({ auth, post, getPosts, createPost, history }) => {
         <div className="col-md-2 mr-5">
           <div className="profile-img">
             <img
-              src={auth.user.avatar && `uploads/avatar/${auth.user.avatar}`}
+              src={profile.avatar && `/uploads/avatar/${profile.avatar}`}
               className="avatar"
               alt="avatar"
             />
           </div>
         </div>
         {/* <!--  bio --> */}
-        <div className=" col-md-6 bio ">{/* <!-- ToDo bio  --> */}</div>
+        <div className=" col-md-4 bio  ">
+          <h3> {profile.bio} </h3>
+        </div>
       </div>
 
       {/* create post modal */}
@@ -103,14 +116,12 @@ const Profile = ({ auth, post, getPosts, createPost, history }) => {
 
       {/* <!-- show posts that user made --> */}
       <div className="row mt-5">
-        {post.posts &&
-          post.posts.map((post) =>
-            post.userId === auth.user._id ? (
-              <div className="col-md-4 post-profile mt-3" key={post._id}>
-                <img src={post.photo && `uploads/${post.photo}`} alt="" />
-              </div>
-            ) : null
-          )}
+        {profile.posts &&
+          profile.posts.map((post) => (
+            <div className="col-md-4 post-profile mt-3" key={post._id}>
+              <img src={post.photo && `/uploads/${post.photo}`} alt="" />
+            </div>
+          ))}
 
         {/* 
           <div class="col-md-4 post-profile">
@@ -132,13 +143,16 @@ const Profile = ({ auth, post, getPosts, createPost, history }) => {
 
 Profile.propTypes = {
   getPosts: PropTypes.func.isRequired,
+  getProfile: PropTypes.func.isRequired,
   createPost: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   post: state.post,
   auth: state.auth,
+  profile: state.profile,
 });
-export default connect(mapStateToProps, { getPosts, createPost })(Profile);
+export default connect(mapStateToProps, { getProfile, createPost })(Profile);

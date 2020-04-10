@@ -28,12 +28,7 @@ const UserSchema = new mongoose.Schema({
   },
   followers: [],
   following: [],
-  posts: [
-    // {
-    //   type: mongoose.Schema.ObjectId,
-    //   ref: "Post",
-    // },
-  ],
+  posts: [],
   createdAt: {
     type: Date,
     default: Date.now,
