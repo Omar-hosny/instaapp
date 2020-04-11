@@ -5,31 +5,32 @@ import { connect } from "react-redux";
 import { getPosts, createPost } from "../../actions/postActions";
 import { getProfile } from "../../actions/profileActions";
 
+import BIO from "./BIO";
 import Modal from "../Modal";
 import { useParams } from "react-router-dom";
 
 const Profile = ({
   auth,
   post,
-  profile: { profile },
+  profile: { profile, loading },
   createPost,
   getProfile,
   history,
 }) => {
+  const [error, setError] = useState("");
   const { id } = useParams();
   useEffect(() => {
     getProfile(id);
     getPosts();
-    // if (post.error !== null) {
-    //   setError(post.error);
-    // }
+    if (post.error !== null) {
+      setError(post.error);
+    }
     // eslint-disable-next-line
-  }, []);
+  }, [post.error]);
 
   const [caption, setCaption] = useState("");
   const [file, setFile] = useState("");
   const [fileName, setFileName] = useState("Choose photo");
-  const [error, setError] = useState("");
 
   const onFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -44,8 +45,12 @@ const Profile = ({
     formData.append("file", file);
     formData.append("caption", caption);
     createPost(formData);
-    history.push("/profile");
+    history.push(`/profile/${id}`);
   };
+
+  if (loading) {
+    return <h1 className="text-center">Loading...</h1>;
+  }
 
   return (
     <div className="container">
@@ -62,9 +67,13 @@ const Profile = ({
           </div>
         </div>
         {/* <!--  bio --> */}
-        <div className=" col-md-4 bio  ">
-          <h3> {profile.bio} </h3>
-        </div>
+        <BIO
+          postsNumber={profile.posts && profile.posts.length}
+          followersNumber={profile.followers && profile.followers.length}
+          followingNumber={profile.following && profile.following.length}
+          bio={profile.bio && profile.bio}
+        />
+        {/* <!--  EndOfBio --> */}
       </div>
 
       {/* create post modal */}
