@@ -18,7 +18,7 @@ router.post("/", verify, async (req, res) => {
   // req.body.name = req.user.name;
 
   // set user to user object
-  const { name, email, avatar } = req.user;
+  const { name, email, avatar } = user;
 
   req.body.user = { name, email, avatar };
   // console.log(req.user.name);
@@ -149,25 +149,34 @@ router.put("/:id", verify, async (req, res) => {
       });
     }
 
-    if (req.files === null) {
-      return res.status(400).json({ msg: "No Photo uploaded" });
+    let body = {};
+    // if (req.files === null) {
+    //   return res.status(400).json({ msg: "No Photo uploaded" });
+    // }
+
+    if (req.files) {
+      // get the photo
+      const file = req.files.file;
+
+      file.mv(`client/public/uploads/${file.name}`, (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send(err);
+        }
+        // res.json({ fileName: file.name, photoPath: `/uploads/${file.name}` });
+      });
+
+      body.photo = file.name;
     }
 
-    // get the photo
-    const file = req.files.file;
+    if (req.body.caption) {
+      body.caption = req.body.caption;
+    }
 
-    file.mv(`client/public/uploads/${file.name}`, (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      }
-      // res.json({ fileName: file.name, photoPath: `/uploads/${file.name}` });
-    });
-
-    const body = {
-      photo: file.name,
-      caption: req.body.caption,
-    };
+    // const body = {
+    //   photo,
+    //   caption,
+    // };
 
     post = await Post.findByIdAndUpdate(req.params.id, body, {
       runValidators: true,

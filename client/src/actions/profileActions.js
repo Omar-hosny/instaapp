@@ -12,7 +12,34 @@ export const getProfile = (id) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: "GET_ERRORS",
-      payload: err.response.data,
+      payload: err.message,
+    });
+  }
+};
+
+// Edit profile
+export const editProfile = (profileData) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  };
+
+  try {
+    setLoading();
+    const res = await axios.put(
+      `/api/profile/edit/${profileData.id}`,
+      profileData,
+      config
+    );
+    dispatch({
+      type: "EDIT_PROFILE",
+      payload: res.data.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "GET_PROFILE_ERRORS",
+      payload: err.message,
     });
   }
 };

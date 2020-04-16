@@ -9,7 +9,7 @@ const EditPost = ({
   post: { current, error },
   getPost,
   updatePost,
-  history
+  history,
 }) => {
   let { id } = useParams();
   useEffect(() => {
@@ -25,19 +25,15 @@ const EditPost = ({
   const [caption, setCaption] = useState("");
   const [errors, setErrors] = useState("");
 
-  const onCaptionChange = e => setCaption(e.target.value);
-  const onFilechange = e => {
+  const onCaptionChange = (e) => setCaption(e.target.value);
+  const onFilechange = (e) => {
     setFile(e.target.files[0]);
     setFileName(e.target.files[0].name);
   };
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    // let editedPost = {
-    //   _id: id,
-    //   file: file,
-    //   caption
-    // };
+
     let editedPost = new FormData();
     editedPost._id = id;
     editedPost.append("file", file);
@@ -124,12 +120,12 @@ const EditPost = ({
 EditPost.propTypes = {
   getPost: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   post: state.post,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { getPost, updatePost })(EditPost);

@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getPosts, createPost } from "../../actions/postActions";
 import { getProfile } from "../../actions/profileActions";
+// import EditProfileBtn from "./EditProfileBtn";
 
 import BIO from "./BIO";
 import Modal from "../Modal";
@@ -45,7 +46,8 @@ const Profile = ({
     formData.append("file", file);
     formData.append("caption", caption);
     createPost(formData);
-    history.push(`/profile/${id}`);
+    // history.push(`/profile/${id}`);
+    window.location.reload(false);
   };
 
   if (loading) {
@@ -67,7 +69,9 @@ const Profile = ({
           </div>
         </div>
         {/* <!--  bio --> */}
+
         <BIO
+          name={profile.name && profile.name}
           postsNumber={profile.posts && profile.posts.length}
           followersNumber={profile.followers && profile.followers.length}
           followingNumber={profile.following && profile.following.length}
@@ -78,7 +82,7 @@ const Profile = ({
 
       {/* create post modal */}
       <div className="row mt-2 ml-3">
-        <Modal title="Create post" btnName="Create new post">
+        <Modal title="Create post" btnName="Create post">
           <form onSubmit={onSubmit}>
             {error ? (
               <div className="alert alert-danger mt-1 mb-1">{error}</div>

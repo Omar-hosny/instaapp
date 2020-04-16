@@ -43,9 +43,9 @@ router.get("/:id", async (req, res) => {
 });
 
 // @desc    Edit profile
-// @route   POST /api/profile/edit/:id
+// @route   PUT /api/profile/edit/:id
 // @access  Private
-router.post("/edit/:id", verify, async (req, res) => {
+router.put("/edit/:id", verify, async (req, res) => {
   try {
     if (req.user.id !== req.params.id) {
       return res.send("UnAuthorized to edit profile");
@@ -79,7 +79,9 @@ router.post("/edit/:id", verify, async (req, res) => {
     // req.body.avatar = file.name;
 
     // bio of user profile
-    body.bio = req.body.bio;
+    if (req.body.bio) {
+      body.bio = req.body.bio;
+    }
 
     user = await User.findByIdAndUpdate(req.params.id, body, {
       new: true,
@@ -93,10 +95,7 @@ router.post("/edit/:id", verify, async (req, res) => {
     });
   } catch (err) {
     console.error(err.message);
-    res.status(400).json({
-      success: false,
-      data: err.message,
-    });
+    res.status(500).send("Server Error");
   }
 });
 
