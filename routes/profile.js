@@ -83,10 +83,12 @@ router.put("/edit/:id", verify, async (req, res) => {
       body.bio = req.body.bio;
     }
 
+    user.posts.map((post) => post.user.avatar === user.avatar);
     user = await User.findByIdAndUpdate(req.params.id, body, {
       new: true,
       runValidators: true,
     });
+
     await user.save();
 
     res.status(200).json({

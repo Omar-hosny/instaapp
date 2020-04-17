@@ -1,12 +1,16 @@
 import React from "react";
-import EditProfileBtn from "./EditProfileBtn";
+import { Link, useParams } from "react-router-dom";
 
 const BIO = ({ postsNumber, followersNumber, followingNumber, bio, name }) => {
+  const { id } = useParams();
   return (
     <div className="col-md-4">
       <div className="edit-btn">
         <h3>{name}</h3>
-        <EditProfileBtn />
+        {/* <EditProfileBtn /> */}
+        <Link to={`/profile/edit/${id}`} className="btn btn-primary ">
+          Edit profile
+        </Link>
       </div>
       <div className="user-follow">
         <div>

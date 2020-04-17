@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getPost, updatePost } from "../actions/postActions";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Modal from "./Modal";
 
 const EditPost = ({
@@ -102,6 +102,14 @@ const EditPost = ({
                 </button>
               </form>
             </Modal>
+            <Link
+              type="button"
+              className="btn btn-secondary ml-1"
+              // to={`/profile/${current.userId}`}
+              to="/"
+            >
+              Back
+            </Link>
           </div>
           <div className="post-img-edit">
             <img src={current.photo && `/uploads/${current.photo}`} alt="" />

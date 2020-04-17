@@ -14,6 +14,7 @@ import Profile from "./components/Profile/Profile";
 import EditPost from "./components/EditPost";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/authActions";
+import EditProfile from "./components/Profile/EditProfile";
 
 // keep user logged in unless he logged out
 if (localStorage.token) {
@@ -36,6 +37,8 @@ const App = () => {
             <PrivateRoute exact path="/edit-post/:id" component={EditPost} />
 
             <Route exact path="/profile/:id" component={Profile} />
+            <Route exact path="/profile/edit/:id" component={EditProfile} />
+
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
           </Switch>
