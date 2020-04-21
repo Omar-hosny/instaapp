@@ -46,8 +46,8 @@ const Profile = ({
     formData.append("file", file);
     formData.append("caption", caption);
     createPost(formData);
-    // history.push(`/profile/${id}`);
-    window.location.reload(false);
+    history.push(`/profile/${id}`);
+    // window.location.reload(false);
   };
 
   if (loading) {

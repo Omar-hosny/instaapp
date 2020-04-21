@@ -31,7 +31,11 @@ const Post = ({
               <div className="header">
                 <div className="img-header">
                   <img
-                    src={post.user && `uploads/avatar/${post.user.avatar}`}
+                    src={
+                      post.user.avatar !== "no-photo.jpg"
+                        ? `/uploads/avatar/${post.user.avatar}`
+                        : `uploads/avatar/no-photo.jpg`
+                    }
                     alt=""
                   />
                 </div>

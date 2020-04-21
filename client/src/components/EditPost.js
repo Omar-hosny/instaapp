@@ -14,11 +14,15 @@ const EditPost = ({
   let { id } = useParams();
   useEffect(() => {
     getPost(id);
+    if (current) {
+      setCaption(current.caption);
+      setFileName(current.photo);
+    }
     if (error !== null) {
       setErrors(error);
     }
     // eslint-disable-next-line
-  }, [getPost, error]);
+  }, [getPost, error, current.photo, current.caption]);
 
   const [file, setFile] = useState("");
   const [fileName, setFileName] = useState("Choose photo");

@@ -24,11 +24,17 @@ router.get("/:id", async (req, res) => {
     }
 
     // check if user have posts to show in their profile
-    const posts = await Post.find().sort({ createdAt: -1 });
+    const posts = await Post.find({ userId: profile._id }).sort({
+      createdAt: -1,
+    });
 
-    if (posts.map((post) => post.userId === profile._id).length === 0) {
+    if (posts) {
       profile.posts = posts;
     }
+    // if (posts.map((post) => post.userId === profile._id).length === 0) {
+    //   profile.posts = posts;
+    //   posts.user = updUser;
+    // }
 
     res.status(200).json({
       success: true,
@@ -47,15 +53,23 @@ router.get("/:id", async (req, res) => {
 // @access  Private
 router.put("/edit/:id", verify, async (req, res) => {
   try {
+    // check if auth
     if (req.user.id !== req.params.id) {
       return res.send("UnAuthorized to edit profile");
     }
+    // check if user exist
     let user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).send("No user found!");
     }
-    // initialise body variable
+    // initialize body variable to update
     let body = {};
+
+    // initialize b variable to update user object in each post when user update his avatar
+    let p = {};
+
+    // destructure vars of user object from req.user
+    const { name, email, avatar } = req.user;
 
     // check if req.file
     if (req.files) {
@@ -75,21 +89,35 @@ router.put("/edit/:id", verify, async (req, res) => {
       body.avatar = file.name;
     }
 
-    // make the avatar : name of file
-    // req.body.avatar = file.name;
+    // make p variable === the updated values of user to update user object in each post related to that user
+    p.user = {
+      name,
+      email,
+      avatar: req.files ? body.avatar : avatar,
+    };
 
-    // bio of user profile
+    // bio of user profile if user updated his bio
     if (req.body.bio) {
       body.bio = req.body.bio;
     }
 
-    user.posts.map((post) => post.user.avatar === user.avatar);
+    // update each post of user with his updated avatar and name and email
+    const ps = await Post.updateMany({ userId: req.user._id }, p, {
+      new: true,
+      runValidators: true,
+    });
+
     user = await User.findByIdAndUpdate(req.params.id, body, {
       new: true,
       runValidators: true,
     });
 
+    // update user obj in user posts array
+    user.posts.map((post) => (post.user = p.user));
+
     await user.save();
+
+    // console.log(ps.length);
 
     res.status(200).json({
       success: true,

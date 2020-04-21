@@ -119,6 +119,19 @@ router.get("/:id", async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.send("No post found");
 
+    // find user owner of the post and update the avatar in the post before return
+    const { userId } = post;
+    const user = await User.findById(userId);
+
+    const { avatar, name, email } = user;
+
+    post.user = {
+      name,
+      email,
+      avatar,
+    };
+    // console.log(user);
+
     res.status(200).json({
       success: true,
       data: post,
