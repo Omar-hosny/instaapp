@@ -9,6 +9,7 @@ body {
   color: #000;
   font-size: 15px;
   line-height: 1.5;
+  font-family: "Roboto", sans-serif;
 }
 
 .post {
@@ -78,4 +79,22 @@ body {
 .edit-btn {
   display: flex;
   justify-content: space-evenly;
+}
+
+.form-control {
+  border-radius: 15px;
+}
+.post {
+  border-radius: 5px;
+}
+
+.post-comment input {
+  border: none;
+}
+
+.layout {
+  margin-top: 8vh;
+}
+.link {
+  text-decoration: none;
 }

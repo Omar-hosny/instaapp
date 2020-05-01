@@ -15,7 +15,7 @@ const Register = ({ auth: { error }, registerUser }) => {
   const [user, setUser] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
 
   const [errors, setErrors] = useState("");
@@ -29,9 +29,9 @@ const Register = ({ auth: { error }, registerUser }) => {
     }, 3000);
   };
 
-  const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
+  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
       setErrors("please enter all fields...");
@@ -40,13 +40,13 @@ const Register = ({ auth: { error }, registerUser }) => {
       const newUser = {
         name,
         email,
-        password
+        password,
       };
       registerUser(newUser);
       setUser({
         name: "",
         email: "",
-        password: ""
+        password: "",
       });
     }
   };
@@ -55,7 +55,7 @@ const Register = ({ auth: { error }, registerUser }) => {
     <div className="layout">
       <div className="container">
         <div className="row">
-          <div className="col-md-6  mx-auto mt-5">
+          <div className="col-md-5  mx-auto mt-5">
             <h1 className="text-center">Register</h1>
             {errors ? <div className="alert alert-danger">{errors}</div> : null}
             <form onSubmit={onSubmit}>
@@ -107,11 +107,11 @@ const Register = ({ auth: { error }, registerUser }) => {
 
 Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { registerUser })(Register);

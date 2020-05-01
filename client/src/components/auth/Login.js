@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
+import { Link } from "react-router-dom";
 
 const Login = ({ auth: { error, isAuthenticated }, loginUser, history }) => {
   useEffect(() => {
@@ -17,7 +18,7 @@ const Login = ({ auth: { error, isAuthenticated }, loginUser, history }) => {
 
   const [user, setUser] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const [errors, setErrors] = useState("");
@@ -31,9 +32,9 @@ const Login = ({ auth: { error, isAuthenticated }, loginUser, history }) => {
     }, 3000);
   };
 
-  const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
+  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
     if (!email || !password) {
       setErrors("please enter all fields...");
@@ -41,12 +42,12 @@ const Login = ({ auth: { error, isAuthenticated }, loginUser, history }) => {
     } else {
       const loggedUser = {
         email,
-        password
+        password,
       };
       loginUser(loggedUser);
       setUser({
         email: "",
-        password: ""
+        password: "",
       });
     }
   };
@@ -55,7 +56,7 @@ const Login = ({ auth: { error, isAuthenticated }, loginUser, history }) => {
     <div className="layout">
       <div className="container">
         <div className="row">
-          <div className="col-md-6  mx-auto mt-5">
+          <div className="col-md-5  mx-auto mt-5">
             <h1 className="text-center">Login</h1>
             {errors ? <div className="alert alert-danger">{errors}</div> : null}
             <form onSubmit={onSubmit}>
@@ -96,11 +97,11 @@ const Login = ({ auth: { error, isAuthenticated }, loginUser, history }) => {
 
 Login.propTypes = {
   loginUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { loginUser })(Login);

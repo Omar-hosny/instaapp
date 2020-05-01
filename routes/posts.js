@@ -248,4 +248,120 @@ router.delete("/:id", verify, async (req, res) => {
   }
 });
 
+// TODO add comments & likes
+
+// @desc    Add a comment
+// @route   POST /api/posts/comment/:id => ID of the post
+// @access  Private
+router.post("/comment/:id", verify, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const post = await Post.findById(req.params.id);
+
+    const text = req.body.text;
+    if (!text) {
+      return res.status(400).send("text is required!");
+    }
+
+    const newComment = {
+      text,
+      name: user.name,
+      avatar: user.avatar,
+      user: req.user.id,
+    };
+
+    post.comments.unshift(newComment);
+
+    await post.save();
+
+    res.json(post.comments);
+    // console.log(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @desc    Edit a comment
+// @route   PUT /api/posts/comment/:id/:comment_id => ID of the comment
+// @access  Private
+router.put("/comment/:id/:comment_id", verify, async (req, res) => {
+  // TODO EDIT profile
+  try {
+    const user = await User.findById(req.user.id);
+    const post = await Post.findById(req.params.id);
+
+    // pull out the comment
+    const comment = post.comments.find(
+      (comment) => comment.id === req.params.comment_id
+    );
+
+    // console.log(comment);
+    // make sure comment exist
+    if (!comment) {
+      return res.status(404).send("Comment does not exist");
+    }
+
+    // check user Owner of the comment
+    if (comment.user.toString() !== user.id) {
+      return res.status(401).send("User unauthorized!");
+    }
+
+    const text = req.body.text;
+    if (!text) {
+      return res.status(400).send("text is required!");
+    }
+
+    const newComment = {
+      text,
+      name: user.name,
+      avatar: user.avatar,
+      user: req.user.id,
+    };
+
+    post.comments = post.comments.map((c) =>
+      c.id === req.params.comment_id ? (c = newComment) : c
+    );
+
+    await post.save();
+    res.json(post.comments);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error.");
+  }
+});
+
+router.delete("/comment/:id/:comment_id", verify, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const post = await Post.findById(req.params.id);
+
+    // pull out the comment
+    const comment = post.comments.find(
+      (comment) => comment.id === req.params.comment_id
+    );
+
+    // console.log(comment);
+    // make sure comment exist
+    if (!comment) {
+      return res.status(404).send("Comment does not exist");
+    }
+
+    // check user Owner of the comment
+    if (comment.user.toString() !== user.id) {
+      return res.status(401).send("User unauthorized!");
+    }
+
+    post.comments = post.comments.filter(
+      ({ id }) => id !== req.params.comment_id
+    );
+
+    await post.save();
+    res.json(post.comments);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error.");
+  }
+});
+
 module.exports = router;
