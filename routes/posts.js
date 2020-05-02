@@ -7,6 +7,7 @@ const router = express.Router();
 const Post = require("../models/Post");
 const User = require("../models/User");
 
+//=============================Posts=======================// =>
 // @desc    Create Post
 // @route   POST /api/posts
 // @access  Private
@@ -186,11 +187,6 @@ router.put("/:id", verify, async (req, res) => {
       body.caption = req.body.caption;
     }
 
-    // const body = {
-    //   photo,
-    //   caption,
-    // };
-
     post = await Post.findByIdAndUpdate(req.params.id, body, {
       runValidators: true,
       new: true,
@@ -248,7 +244,7 @@ router.delete("/:id", verify, async (req, res) => {
   }
 });
 
-// TODO add comments & likes
+//---------------- Comments -----------------------------// =>
 
 // @desc    Add a comment
 // @route   POST /api/posts/comment/:id => ID of the post
@@ -286,7 +282,6 @@ router.post("/comment/:id", verify, async (req, res) => {
 // @route   PUT /api/posts/comment/:id/:comment_id => ID of the comment
 // @access  Private
 router.put("/comment/:id/:comment_id", verify, async (req, res) => {
-  // TODO EDIT profile
   try {
     const user = await User.findById(req.user.id);
     const post = await Post.findById(req.params.id);
@@ -319,8 +314,11 @@ router.put("/comment/:id/:comment_id", verify, async (req, res) => {
       user: req.user.id,
     };
 
-    post.comments = post.comments.map((c) =>
-      c.id === req.params.comment_id ? (c = newComment) : c
+    // update the comment
+    post.comments = post.comments.map((oldComment) =>
+      oldComment.id === req.params.comment_id
+        ? (oldComment = newComment)
+        : oldComment
     );
 
     await post.save();
@@ -361,6 +359,74 @@ router.delete("/comment/:id/:comment_id", verify, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error.");
+  }
+});
+
+//===========================Likes & unLike =====================// =>
+
+// @desc    Add a like
+// @route   PUT /api/posts/like/:id => ID of the post
+// @access  Private
+router.put("/like/:id", verify, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const post = await Post.findById(req.params.id);
+
+    // Check if user already liked the post
+    if (
+      post.likes.filter((like) => like.user.toString() === req.user.id).length >
+      0
+    ) {
+      return res.status(400).send("you already liked that post.");
+    }
+
+    const like = {
+      name: user.name,
+      avatar: user.avatar,
+      user: req.user.id,
+    };
+
+    post.likes.unshift(like);
+
+    await post.save();
+
+    res.json(post.likes);
+    // console.log(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @desc    Remove the like (unLike)
+// @route   PUT /api/posts/unlike/:id => ID of the post
+// @access  Private
+router.put("/unlike/:id", verify, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const post = await Post.findById(req.params.id);
+
+    // Check if user already liked the post
+    if (
+      post.likes.filter((like) => like.user.toString() === req.user.id)
+        .length === 0
+    ) {
+      return res.status(400).send("you have not been liked yet");
+    }
+    // Get remove index
+    const removeIndex = post.likes
+      .map((like) => like.user.toString())
+      .indexOf(req.user.id);
+
+    post.likes.splice(removeIndex, 1);
+
+    await post.save();
+
+    res.json(post.likes);
+    // console.log(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
   }
 });
 

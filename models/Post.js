@@ -46,6 +46,16 @@ const PostSchema = new mongoose.Schema({
         ref: "User",
         required: true,
       },
+      name: {
+        type: String,
+      },
+      avatar: {
+        type: String,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
     },
   ],
   createdAt: {
