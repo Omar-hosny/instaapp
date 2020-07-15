@@ -6,6 +6,7 @@ import { useParams, Link } from "react-router-dom";
 import Modal from "./Modal";
 
 const EditPost = ({
+  auth,
   post: { current, error },
   getPost,
   updatePost,
@@ -53,65 +54,63 @@ const EditPost = ({
       <div className="row">
         <div className="col-md-6 mx-auto mt-5">
           <div className="mb-2">
-            <Modal title="Edit post" btnName="Edit">
-              <form onSubmit={onSubmit}>
-                {errors ? (
-                  <div className="alert alert-danger"> {errors} </div>
-                ) : null}
-                <div className="input-group mb-3">
-                  <div className="input-group-prepend">
-                    <span
-                      className="input-group-text"
-                      id="inputGroupFileAddon01"
-                    >
-                      Upload
-                    </span>
+            {current.userId === auth.user._id ? (
+              <Modal title="Edit post" btnName="Edit">
+                <form onSubmit={onSubmit}>
+                  {errors ? (
+                    <div className="alert alert-danger"> {errors} </div>
+                  ) : null}
+                  <div className="input-group mb-3">
+                    <div className="input-group-prepend">
+                      <span
+                        className="input-group-text"
+                        id="inputGroupFileAddon01"
+                      >
+                        Upload
+                      </span>
+                    </div>
+                    <div className="custom-file">
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="inputGroupFile01"
+                        aria-describedby="inputGroupFileAddon01"
+                        onChange={onFilechange}
+                      />
+                      <label
+                        className="custom-file-label"
+                        htmlFor="inputGroupFile01"
+                      >
+                        {fileName}
+                      </label>
+                    </div>
                   </div>
-                  <div className="custom-file">
+                  <div className="form-group">
+                    <label htmlFor="caption">Caption</label>
                     <input
-                      type="file"
-                      className="custom-file-input"
-                      id="inputGroupFile01"
-                      aria-describedby="inputGroupFileAddon01"
-                      onChange={onFilechange}
+                      type="text"
+                      className="form-control"
+                      value={caption}
+                      onChange={onCaptionChange}
                     />
-                    <label
-                      className="custom-file-label"
-                      htmlFor="inputGroupFile01"
-                    >
-                      {fileName}
-                    </label>
                   </div>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="caption">Caption</label>
                   <input
-                    type="text"
-                    className="form-control"
-                    value={caption}
-                    onChange={onCaptionChange}
+                    type="submit"
+                    value="Post"
+                    className="btn btn-primary mr-1"
                   />
-                </div>
-                <input
-                  type="submit"
-                  value="Post"
-                  className="btn btn-primary mr-1"
-                />
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
-              </form>
-            </Modal>
-            <Link
-              type="button"
-              className="btn btn-secondary ml-1"
-              // to={`/profile/${current.userId}`}
-              to="/"
-            >
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </form>
+              </Modal>
+            ) : null}
+
+            <Link type="button" className="btn btn-secondary ml-1" to="/">
               Back
             </Link>
           </div>

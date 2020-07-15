@@ -51,7 +51,7 @@ const Navbar = ({ auth: { user, isAuthenticated }, logout }) => {
   );
 
   return (
-    <nav className="navbar navbar-expand-md navbar-dark bg-secondary ">
+    <nav className="navbar navbar-expand-md navbar-dark bg-primary">
       <div className="container">
         <Link className="navbar-brand" to="/">
           <i className="fab fa-instagram"></i> InstaApp

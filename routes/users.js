@@ -80,7 +80,13 @@ router.post("/login", async (req, res) => {
 
     // create token
     const token = jwt.sign(
-      { _id: user._id, name: user.name, avatar: user.avatar },
+      {
+        _id: user._id,
+        name: user.name,
+        avatar: user.avatar,
+        followers: user.followers,
+        following: user.following,
+      },
       process.env.SECRET
     );
     res.header("auth-token", token).send(token);
@@ -93,19 +99,70 @@ router.post("/login", async (req, res) => {
   }
 });
 
-
 // @desc   make a follow request
 // @route   POST /api/users/follow/:id
 // @access  Private
-router.post("/follow/:id", verify, async (req, res) => {
+// router.post("/follow/:id", verify, async (req, res) => {
+//   try {
+//     const user1 = await User.findById(req.params.id); // the user i want to follow
+//     const user = await User.findById(req.user.id); // the logged in user
+//     if (!user1) {
+//       return res.status(404).send("User not found..");
+//     }
+//     if (!user) {
+//       return res.status(404).send("User logged in not found...");
+//     }
+
+//     // the logged in user
+//     const followerUser = {
+//       id: user.id,
+//       name: user.name,
+//       avatar: user.avatar,
+//     };
+
+//     // the user i want to follow
+//     const followingUser = {
+//       id: user1._id,
+//       name: user1.name,
+//       avatar: user1.avatar,
+//     };
+//     // console.log(followingUser, followerUser);
+
+//     // Check if user already follow
+//     if (user1.followers.filter((item) => item.id === req.user.id).length > 0) {
+//       return res.status(400).send("already followed that user!");
+//     } else if (
+//       user.following.filter((item) => item.id === req.params.id).length > 0
+//     ) {
+//       return res.status(400).send("You already followed that user");
+//     }
+//     // push it into followers & following array
+//     user1.followers.unshift(followerUser);
+//     user.following.unshift(followingUser);
+
+//     await user1.save();
+//     await user.save();
+//     // res.status(200).json({
+//     //   success: true,
+//     //   data: user.following,
+//     // });
+
+//     res.status(200).send(user.following);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(400).send("Server Error..");
+//   }
+// });
+
+router.put("/follow/:id", verify, async (req, res) => {
   try {
-    const user1 = await User.findById(req.params.id); // the user i want to follow
-    const user = await User.findById(req.user.id); // the logged in user
+    let user1 = await User.findById(req.params.id); // the user i want to follow
+    let user = await User.findById(req.user.id); // the logged in user
     if (!user1) {
       return res.status(404).send("User not found..");
     }
     if (!user) {
-      return res.status(404).send("User not found...");
+      return res.status(404).send("User logged in not found...");
     }
 
     // the logged in user
@@ -124,70 +181,155 @@ router.post("/follow/:id", verify, async (req, res) => {
     // console.log(followingUser, followerUser);
 
     // Check if user already follow
+
     if (user1.followers.filter((item) => item.id === req.user.id).length > 0) {
-      return res.status(400).send("already followed that user");
+      return res.status(400).send("already followed that user!");
     } else if (
       user.following.filter((item) => item.id === req.params.id).length > 0
     ) {
-      return res.status(400).send("already followed that user");
+      return res.status(400).send("You already followed that user");
     }
+
     // push it into followers & following array
-    user1.followers.unshift(followerUser);
-    user.following.unshift(followingUser);
+    user = await User.findByIdAndUpdate(
+      req.user.id,
+      { $push: { following: followingUser } },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    user1 = await User.findByIdAndUpdate(
+      req.params.id,
+      { $push: { followers: followerUser } },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     await user1.save();
     await user.save();
-    res.status(200).json({
-      success: true,
-      data: { user1, user },
-    });
+    // res.status(200).json({
+    //   success: true,
+    //   data: user.following,
+    // });
+
+    res.status(200).send(user1);
   } catch (err) {
-    res.status(400).json({
-      success: false,
-      data: err.message,
-    });
+    console.error(err.message);
+    res.status(400).send("Server Error..");
   }
 });
 
 // @desc    Remove follow ( Unfollow request)
 // @route   POST /api/users/unfollow/:id
 // @access  Private
-router.post("/unfollow/:id", verify, async (req, res) => {
+router.put("/unfollow/:id", verify, async (req, res) => {
   try {
-    const user1 = await User.findById(req.params.id); // the user i want to unfollow
-    const user = await User.findById(req.user.id); // the logged in user
+    let user1 = await User.findById(req.params.id); // the user i want to unfollow
+    let user = await User.findById(req.user.id); // the logged in user
     if (!user1) {
       return res.status(404).send("User not found..");
     }
     if (!user) {
-      return res.status(404).send("User not found...");
+      return res.status(404).send("User logged in not found...");
     }
+
+    // const unfollowedUser = {
+    //   id: user1._id,
+    //   name: user1.name,
+    //   avatar: user1.avatar,
+    // };
+
+    // the logged in user
+    const followerUser = {
+      id: user.id,
+      name: user.name,
+      avatar: user.avatar,
+    };
+
+    // the user i want to follow
+    const followingUser = {
+      id: user1._id,
+      name: user1.name,
+      avatar: user1.avatar,
+    };
+
     // Check if user already follow
     if (user1.followers.filter((item) => item.id === user.id).length > 0) {
-      const removeIndex = user1.followers
-        .map((item) => item.id.toString())
-        .indexOf(req.user.id);
-      user1.followers.splice(removeIndex, 1);
-      const removeIndex2 = user.following
-        .map((item) => item.id.toString())
-        .indexOf(req.params.id);
-      user.following.splice(removeIndex2, 1);
+      user = await User.findByIdAndUpdate(
+        req.user.id,
+        { $pull: { following: followingUser } },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+
+      user1 = await User.findByIdAndUpdate(
+        req.params.id,
+        { $pull: { followers: followerUser } },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+
       await user1.save();
       await user.save();
     } else {
       return res.status(400).send("You have not followed that user yet");
     }
 
-    res.status(200).json({
-      success: true,
-      data: { user, user1 },
-    });
+    res.status(200).send(user1);
   } catch (err) {
-    res.status(400).json({
-      success: false,
-      data: err.message,
-    });
+    res.status(400).send("Server Error...");
   }
 });
+
+// router.post("/unfollow/:id", verify, async (req, res) => {
+//   try {
+//     const user1 = await User.findById(req.params.id); // the user i want to unfollow
+//     const user = await User.findById(req.user.id); // the logged in user
+//     if (!user1) {
+//       return res.status(404).send("User not found..");
+//     }
+//     if (!user) {
+//       return res.status(404).send("User logged in not found...");
+//     }
+//     // Check if user already follow
+//     if (user1.followers.filter((item) => item.id === user.id).length > 0) {
+//       const removeIndex = user1.followers
+//         .map((item) => item.id.toString())
+//         .indexOf(req.user.id);
+//       user1.followers.splice(removeIndex, 1);
+//       const removeIndex2 = user.following
+//         .map((item) => item.id.toString())
+//         .indexOf(req.params.id);
+//       user.following.splice(removeIndex2, 1);
+//       await user1.save();
+//       await user.save();
+//     } else {
+//       return res.status(400).send("You have not followed that user yet");
+//     }
+
+//     const unfollowedUser = {
+//       id: user1._id,
+//       name: user1.name,
+//       avatar: user1.avatar,
+//     };
+
+//     // res.status(200).json({
+//     //   success: true,
+//     //   data: unfollowedUser,
+//     // });
+
+//     res.status(200).send(unfollowedUser);
+//   } catch (err) {
+//     res.status(400).send("Server Error...");
+//   }
+// });
 
 module.exports = router;

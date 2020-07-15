@@ -39,7 +39,41 @@ export const editProfile = (profileData) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: "GET_PROFILE_ERRORS",
-      payload: err.message,
+      payload: err.response.message,
+    });
+  }
+};
+
+// Follow user
+export const followUser = (id) => async (dispatch) => {
+  setLoading();
+  try {
+    const res = await axios.put(`/api/users/follow/${id}`);
+    dispatch({
+      type: "FOLLOW_USER",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "GET_PROFILE_ERRORS",
+      payload: err.response.data,
+    });
+  }
+};
+
+// UnFollow user
+export const unFollowUser = (id) => async (dispatch) => {
+  setLoading();
+  try {
+    const res = await axios.put(`/api/users/unfollow/${id}`);
+    dispatch({
+      type: "UNFOLLOW_USER",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "GET_PROFILE_ERRORS",
+      payload: err.response.data,
     });
   }
 };

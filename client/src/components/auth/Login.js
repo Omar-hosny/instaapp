@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
-import { Link } from "react-router-dom";
 
 const Login = ({ auth: { error, isAuthenticated }, loginUser, history }) => {
   useEffect(() => {

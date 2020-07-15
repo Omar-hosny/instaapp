@@ -1,12 +1,12 @@
 import React, { Fragment } from "react";
 
-const Modal = props => {
+const Modal = (props) => {
   return (
     <Fragment>
       {/*  Button trigger modal */}
       <button
         type="button"
-        className="btn btn-primary"
+        className="btn btn-primary rounded"
         data-toggle="modal"
         data-target="#staticBackdrop"
       >

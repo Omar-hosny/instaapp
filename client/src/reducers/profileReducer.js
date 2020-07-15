@@ -4,29 +4,41 @@ const initialState = {
   profile: {},
   // isAuthenticated: false,
   loading: false,
-  // user: null,
+  // user: null,s
   error: null,
 };
+
 export default (state = initialState, action) => {
   switch (action.type) {
     case "GET_PROFILE":
-      console.log(state.profile);
       return {
         ...state,
         profile: action.payload,
         loading: false,
       };
-
     case "EDIT_PROFILE":
       return {
         ...state,
-        // profile: state.profile.profile.map((item) =>
-        //   item._id === action.payload._id ? action.payload : item
-        // ),
-        profile:
-          action.payload._id === state.profile._id
-            ? action.payload
-            : state.profile,
+        profile: action.payload,
+        // profile:
+        //   action.payload._id === state.profile._id
+        //     ? action.payload
+        //     : state.profile,
+        loading: false,
+      };
+    case "FOLLOW_USER":
+      // console.log(action.payload.name);
+      return {
+        ...state,
+        // profile: [state.profile.followers === action.payload],
+        profile: action.payload,
+        loading: false,
+      };
+    case "UNFOLLOW_USER":
+      // console.log(action.payload);
+      return {
+        ...state,
+        profile: action.payload,
         loading: false,
       };
     case "GET_PROFILE_ERRORS":

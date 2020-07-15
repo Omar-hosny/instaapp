@@ -25,9 +25,9 @@ const EditProfile = ({
       setErrors(profile.error);
     }
     // eslint-disable-next-line
-  }, [profile.error, profile.avatar, profile.bio]);
+  }, [profile.error]);
 
-  const [bio, setBio] = useState(profile.bio);
+  const [bio, setBio] = useState("");
   const [file, setFile] = useState("");
   const [fileName, setFileName] = useState("Choose avatar");
   const [errors, setErrors] = useState("");
@@ -60,21 +60,24 @@ const EditProfile = ({
           <div className="col-md-6 mx-auto mt-5">
             <h2 className="text-center mt-2 mb-3">Edit profile</h2>
             <form onSubmit={onSubmit}>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroupFileAddon01">
+              <div className="input-group mb-3">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="inputGroupFileAddon01">
                     Edit avatar
                   </span>
                 </div>
-                <div class="custom-file">
+                <div className="custom-file">
                   <input
                     type="file"
-                    class="custom-file-input"
+                    className="custom-file-input"
                     id="inputGroupFile01"
                     aria-describedby="inputGroupFileAddon01"
                     onChange={onFileChange}
                   />
-                  <label class="custom-file-label" for="inputGroupFile01">
+                  <label
+                    className="custom-file-label"
+                    htmlFor="inputGroupFile01"
+                  >
                     {fileName}
                   </label>
                 </div>
@@ -82,7 +85,7 @@ const EditProfile = ({
               <div class="form-group">
                 <label for="caption">Bio</label>
                 <textarea
-                  name="bio"
+                  // name="bio"
                   cols="20"
                   rows="4"
                   className="form-control"
@@ -122,7 +125,7 @@ EditProfile.propTypes = {
   editProfile: PropTypes.func.isRequired,
   getProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  history: PropTypes.isRequired,
+  history: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({

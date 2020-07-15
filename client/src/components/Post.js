@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getPosts, getPost, deletePost } from "../actions/postActions";
 import { Link } from "react-router-dom";
+import classnames from "classnames";
 
 const Post = ({
   post: { posts, user, error, loading },
@@ -22,140 +23,74 @@ const Post = ({
     return <h1 className="text-center mt-5">No posts to show!</h1>;
   }
 
+  // Check if user liked the post or not
+  const findLike = (likes) => {
+    if (likes.filter((like) => like.user === auth.user._id).length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <div className="container">
-      <div className="row">
-        {posts &&
-          posts.map((post) => (
-            <div key={post._id} className="post mx-auto mt-5 mb-5">
-              <div className="header">
-                <div className="img-header">
-                  <img
-                    src={
-                      post.user.avatar !== "no-photo.jpg"
-                        ? `/uploads/avatar/${post.user.avatar}`
-                        : `uploads/avatar/no-photo.jpg`
-                    }
-                    alt=""
-                  />
-                </div>
-                <div className="name-header">
-                  <Link to={`/profile/${post.userId}`}>
-                    <h5>{post.user.name}</h5>
-                  </Link>
-                </div>
-
-                {/* post actions */}
-                {post.userId === auth.user._id ? (
-                  <div className="dropdown ml-auto mr-1">
-                    <button
-                      className="btn btn-secondary btn-sm dropdown-toggle"
-                      type="button"
-                      id="dropdownMenu2"
+      {posts.map((postItem) => (
+        <div className="row" key={postItem._id}>
+          <div className="post-item mx-auto mt-5" key={postItem._id}>
+            <div className="card">
+              <div className="card-header">
+                <img
+                  src={`/uploads/avatar/${postItem.user.avatar}`}
+                  className="post-header-img"
+                  alt=""
+                />
+                <Link to={`/profile/${postItem.userId}`} className="mt-2 ">
+                  <h5 className="card-title">{postItem.user.name}</h5>
+                </Link>
+                {auth.user._id === postItem.userId ? (
+                  <div className="dropdown ml-auto actions">
+                    <i
+                      className="fas fa-angle-down "
+                      id="dropdownMenuButton"
                       data-toggle="dropdown"
-                      // aria-haspopup="true"
-                      // aria-expanded="false"
-                    ></button>
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    ></i>
                     <div
                       className="dropdown-menu"
-                      aria-labelledby="dropdownMenu2"
+                      aria-labelledby="dropdownMenuButton"
                     >
                       <Link
                         className="dropdown-item"
-                        to={`/edit-post/${post._id}`}
+                        to={`/edit-post/${postItem._id}`}
                       >
                         Edit
                       </Link>
                       <button
                         className="dropdown-item"
-                        type="button"
-                        onClick={() => deletePost(post._id)}
+                        onClick={() => deletePost(postItem._id)}
                       >
                         Delete
                       </button>
                     </div>
                   </div>
                 ) : null}
-                {/* end of post actions */}
               </div>
-              <div className="post-img mt-2">
-                <img src={post.photo && `uploads/${post.photo}`} alt="" />
-                <h6 className="mt-2 ml-2">{post.caption}</h6>
-              </div>
-              <div className="post-comment">
-                <div className="input-group ">
-                  <input
-                    type="text"
-                    placeholder="Add a comment..."
-                    className="form-control"
-                  />
+              <div className="post-body">
+                <img
+                  src={`/uploads/${postItem.photo}`}
+                  alt=""
+                  className="post-photo"
+                />
+                <div className="card-footer postItem-caption">
+                  <h6 className="card-title">{postItem.user.name}</h6>
+                  <h5 className="">{postItem.caption}</h5>
                 </div>
               </div>
             </div>
-          ))}
-      </div>
-      {/* 
-      <div className="row">
-        <div className="post mx-auto mt-5 ">
-          <div className="header">
-            <div className="img-header">
-              <img
-                src="https://images.unsplash.com/photo-1552960366-b330a2f83823?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-                alt=""
-              />
-            </div>
-            <div className="name-header">
-              <h5>Omar hosny</h5>
-            </div>
-          </div>
-          <div className="post-img mt-2">
-            <img
-              src="https://images.unsplash.com/photo-1558403299-52a71df71bcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              alt=""
-            />
-          </div>
-          <div className="post-comment">
-            <div className="input-group input-group-lg">
-              <input
-                type="text"
-                placeholder="Add a comment..."
-                className="form-control"
-              />
-            </div>
           </div>
         </div>
-      </div> */}
-      {/* 
-      <div className="row">
-        <div className="post mx-auto mt-5 ">
-          <div className="header">
-            <div className="img-header">
-              <img
-                src="https://images.unsplash.com/photo-1552960366-b330a2f83823?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-                alt=""
-              />
-            </div>
-            <div className="name-header">
-              <h5>Omar hosny</h5>
-            </div>
-          </div>
-          <div className="post-img mt-2">
-            <img
-              src="https://images.unsplash.com/photo-1558403299-52a71df71bcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              alt=""
-            />
-          </div>
-          <div className="post-comment">
-            <div className="input-group input-group-lg">
-              <input
-                type="text"
-                placeholder="Add a comment..."
-                className="form-control"
-              />
-            </div>
-          </div>
-        </div>
-      </div> */}
+      ))}
     </div>
   );
 };

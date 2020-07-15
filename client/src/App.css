@@ -3,6 +3,9 @@
   margin: 0;
   padding: 0;
 }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   background: #fdf8f8;
@@ -54,8 +57,10 @@ body {
 }
 
 .post-profile {
-  height: auto;
   padding-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  max-height: 320px;
 }
 
 .post-img-edit img {
@@ -97,4 +102,46 @@ body {
 }
 .link {
   text-decoration: none;
+}
+
+.card-body img {
+  width: 100%;
+}
+
+.post-photo {
+  width: 600px;
+  /* height: 700px; */
+}
+
+.post-header-img img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.card-header img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.actions {
+  cursor: pointer;
+}
+
+.loading img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 600px;
+  height: 350px;
+  margin: auto;
+  margin-top: 100px;
 }

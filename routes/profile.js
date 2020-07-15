@@ -28,6 +28,8 @@ router.get("/:id", async (req, res) => {
       createdAt: -1,
     });
 
+    // user = await User.findById(req.params.id);
+
     if (posts) {
       profile.posts = posts;
     }
@@ -53,7 +55,7 @@ router.get("/:id", async (req, res) => {
 // @access  Private
 router.put("/edit/:id", verify, async (req, res) => {
   try {
-    // check if auth
+    // check auth
     if (req.user.id !== req.params.id) {
       return res.send("UnAuthorized to edit profile");
     }
@@ -67,6 +69,9 @@ router.put("/edit/:id", verify, async (req, res) => {
 
     // initialize b variable to update user object in each post when user update his avatar
     let p = {};
+
+    // declare variable to update avatar in likes array of each post if user update his avatar
+    // let updLike = {};
 
     // destructure vars of user object from req.user
     const { name, email, avatar } = req.user;
@@ -96,6 +101,13 @@ router.put("/edit/:id", verify, async (req, res) => {
       avatar: req.files ? body.avatar : avatar,
     };
 
+    // TODO
+    // updLike.likes = {
+    //   user: req.user.id,
+    //   name,
+    //   avatar: req.files ? body.avatar : avatar,
+    // };
+
     // bio of user profile if user updated his bio
     if (req.body.bio) {
       body.bio = req.body.bio;
@@ -106,6 +118,13 @@ router.put("/edit/:id", verify, async (req, res) => {
       new: true,
       runValidators: true,
     });
+
+    //  TODO update each like with updated avatar
+
+    // const updateLike = await Post.updateMany({ userId: req.user.id }, updLike, {
+    //   new: true,
+    //   runValidators: true,
+    // });
 
     user = await User.findByIdAndUpdate(req.params.id, body, {
       new: true,
