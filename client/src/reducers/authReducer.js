@@ -3,7 +3,7 @@ const initialState = {
   isAuthenticated: false,
   loading: false,
   user: null,
-  error: null
+  error: null,
 };
 
 export default (state = initialState, action) => {
@@ -11,20 +11,20 @@ export default (state = initialState, action) => {
     case "SET_LOADING":
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     case "SET_CURRENT_USER":
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: action.payload
+        user: action.payload,
       };
     case "REGISTER_SUCCESS":
       return {
         ...state,
         loading: false,
-        user: action.payload
+        user: action.payload,
       };
     case "LOGIN_SUCCESS":
       // localStorage.setItem("token", action.payload);
@@ -33,14 +33,14 @@ export default (state = initialState, action) => {
         loading: false,
         isAuthenticated: true,
         token: action.payload.token,
-        user: action.payload.decode
+        user: action.payload.decode,
       };
     case "REGISTER_FAIELD":
       return {
         ...state,
         loading: false,
         user: null,
-        error: action.payload
+        error: action.payload,
       };
     case "LOGIN_FAIELD":
       return {
@@ -48,7 +48,7 @@ export default (state = initialState, action) => {
         loading: false,
         isAuthenticated: false,
         user: null,
-        error: action.payload
+        error: action.payload,
       };
 
     case "LOGOUT_USER":
@@ -59,7 +59,7 @@ export default (state = initialState, action) => {
         token: null,
         loading: false,
         user: null,
-        error: null
+        error: null,
       };
     default:
       return state;

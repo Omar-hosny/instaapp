@@ -13,7 +13,7 @@ const BIO = ({ followUser, unFollowUser, auth, profile: { profile } }) => {
 
   // const indexOfUser = followers && followers.map((f) => f.id);
 
-  // followers and following number state snd show state for follow btn and unFollow btn
+  // followers and following number state snd show state for handle show follow btn and unFollow btn
   const [show, setShow] = useState(false);
   const [followersNo, setFollowersNo] = useState(0);
   const [followingNo, setFollowingNo] = useState(0);
@@ -76,8 +76,7 @@ const BIO = ({ followUser, unFollowUser, auth, profile: { profile } }) => {
       <div className="edit-btn">
         <h3>{profile.name}</h3>
 
-        {/* {followBtn} */}
-
+        {/* EditBTN */}
         {id === auth.user._id ? showEdit : null}
 
         {/* Hide follow and unFollow btn if current profile === current user */}

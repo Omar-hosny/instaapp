@@ -1,7 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getPosts, getPost, deletePost } from "../actions/postActions";
+import {
+  getPosts,
+  getPost,
+  deletePost,
+  likePost,
+  unLikePost,
+} from "../actions/postActions";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 
@@ -9,10 +15,21 @@ const Post = ({
   post: { posts, user, error, loading },
   auth,
   getPosts,
+  likePost,
+  unLikePost,
   deletePost,
 }) => {
+  const [showLike, setShowLike] = useState(false);
+
   useEffect(() => {
     getPosts();
+
+    // {
+    //   posts &&
+    //     posts.map((item) =>
+    //       findLike(item.likes) ? setShowLike(true) : setShowLike(false)
+    //     );
+    // }
 
     // eslint-disable-next-line
   }, []);
@@ -30,6 +47,16 @@ const Post = ({
     } else {
       return false;
     }
+  };
+
+  const onLike = (id) => {
+    // setShowLike(true);
+    likePost(id);
+  };
+
+  const onUnLike = (id) => {
+    // setShowLike(false);
+    unLikePost(id);
   };
 
   return (
@@ -83,6 +110,29 @@ const Post = ({
                   className="post-photo"
                 />
                 <div className="card-footer postItem-caption">
+                  {findLike(postItem.likes) ? (
+                    <div>
+                      <i
+                        className="fa fa-heart fa-lg"
+                        onClick={() => onUnLike(postItem._id)}
+                      ></i>
+                      <p>{postItem.likes.length} liked</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <i
+                        className="fa fa-heart-o fa-lg"
+                        onClick={() => onLike(postItem._id)}
+                      ></i>
+                      <p>{postItem.likes.length} liked</p>
+                    </div>
+                  )}
+                  {/* <div>
+                    <i className="fa fa-heart fa-lg"></i> <p>like</p>
+                  </div> */}
+                  {/* <div>
+                    <i className="fa fa-heart-o fa-lg"></i> <p>liked</p>
+                  </div> */}
                   <h6 className="card-title">{postItem.user.name}</h6>
                   <h5 className="">{postItem.caption}</h5>
                 </div>
@@ -98,6 +148,8 @@ const Post = ({
 Post.propTypes = {
   getPosts: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
+  likePost: PropTypes.func.isRequired,
+  unLikePost: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
 };
@@ -107,4 +159,9 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getPosts, deletePost })(Post);
+export default connect(mapStateToProps, {
+  getPosts,
+  deletePost,
+  likePost,
+  unLikePost,
+})(Post);

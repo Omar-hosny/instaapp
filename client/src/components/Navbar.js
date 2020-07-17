@@ -22,7 +22,10 @@ const Navbar = ({ auth: { user, isAuthenticated }, logout }) => {
               </Link>
             </li> */}
       <li className="nav-item">
-        <Link className="nav-link" to={user && `/profile/${user._id}`}>
+        <Link
+          className="nav-link"
+          to={user !== null ? `/profile/${user._id}` : ""}
+        >
           <i className="fa fa-user"></i> {user ? user.name : null}
         </Link>
       </li>

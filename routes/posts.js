@@ -369,8 +369,8 @@ router.delete("/comment/:id/:comment_id", verify, async (req, res) => {
 // @access  Private
 router.put("/like/:id", verify, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
-    const post = await Post.findById(req.params.id);
+    let user = await User.findById(req.user.id);
+    let post = await Post.findById(req.params.id);
 
     // Check if user already liked the post
     if (
@@ -386,11 +386,19 @@ router.put("/like/:id", verify, async (req, res) => {
       user: req.user.id,
     };
 
-    post.likes.unshift(like);
+    // post.likes.unshift(like);
+    post = await Post.findByIdAndUpdate(
+      req.params.id,
+      { $push: { likes: like } },
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
 
     await post.save();
 
-    res.json(post.likes);
+    res.status(200).json(post);
     // console.log(user);
   } catch (err) {
     console.error(err.message);
@@ -403,26 +411,41 @@ router.put("/like/:id", verify, async (req, res) => {
 // @access  Private
 router.put("/unlike/:id", verify, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
-    const post = await Post.findById(req.params.id);
+    let user = await User.findById(req.user.id);
+    let post = await Post.findById(req.params.id);
 
     // Check if user already liked the post
     if (
       post.likes.filter((like) => like.user.toString() === req.user.id)
         .length === 0
     ) {
-      return res.status(400).send("you have not been liked yet");
+      return res.status(400).send("you have not been liked this post yet");
     }
     // Get remove index
-    const removeIndex = post.likes
-      .map((like) => like.user.toString())
-      .indexOf(req.user.id);
+    // const removeIndex = post.likes
+    //   .map((like) => like.user.toString())
+    //   .indexOf(req.user.id);
 
-    post.likes.splice(removeIndex, 1);
+    // post.likes.splice(removeIndex, 1);
+
+    const like = {
+      name: user.name,
+      avatar: user.avatar,
+      user: req.user.id,
+    };
+
+    post = await Post.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { likes: like } },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     await post.save();
 
-    res.json(post.likes);
+    res.json(post);
     // console.log(user);
   } catch (err) {
     console.error(err.message);
