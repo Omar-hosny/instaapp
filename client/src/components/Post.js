@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import Comment from "./Comment";
 import { connect } from "react-redux";
 import {
   getPosts,
   getPost,
   deletePost,
+  deleteComment,
   likePost,
   unLikePost,
 } from "../actions/postActions";
 import { Link } from "react-router-dom";
-import classnames from "classnames";
+// import classnames from "classnames";
 
 const Post = ({
   post: { posts, user, error, loading },
@@ -18,19 +20,12 @@ const Post = ({
   likePost,
   unLikePost,
   deletePost,
+  deleteComment,
 }) => {
-  const [showLike, setShowLike] = useState(false);
+  // const [showLike, setShowLike] = useState(false);
 
   useEffect(() => {
     getPosts();
-
-    // {
-    //   posts &&
-    //     posts.map((item) =>
-    //       findLike(item.likes) ? setShowLike(true) : setShowLike(false)
-    //     );
-    // }
-
     // eslint-disable-next-line
   }, []);
 
@@ -135,7 +130,26 @@ const Post = ({
                   </div> */}
                   <h6 className="card-title">{postItem.user.name}</h6>
                   <h5 className="">{postItem.caption}</h5>
+                  {postItem.comments
+                    ? postItem.comments.map((comment) => (
+                        <div className="comment-item" key={comment._id}>
+                          <h6 className="card-title comment-name">
+                            {comment.name}
+                          </h6>
+                          <p>{comment.text}</p>
+                          {comment.user === auth.user._id ? (
+                            <i
+                              className="fas fa-times"
+                              onClick={() =>
+                                deleteComment(postItem._id, comment._id)
+                              }
+                            ></i>
+                          ) : null}
+                        </div>
+                      ))
+                    : null}
                 </div>
+                <Comment postId={postItem._id} />
               </div>
             </div>
           </div>
@@ -150,6 +164,7 @@ Post.propTypes = {
   deletePost: PropTypes.func.isRequired,
   likePost: PropTypes.func.isRequired,
   unLikePost: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
 };
@@ -164,4 +179,5 @@ export default connect(mapStateToProps, {
   deletePost,
   likePost,
   unLikePost,
+  deleteComment,
 })(Post);

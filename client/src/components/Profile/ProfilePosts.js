@@ -3,20 +3,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getPosts, createPost } from "../../actions/postActions";
-import {
-  getProfile,
-  unFollowUser,
-  followUser,
-} from "../../actions/profileActions";
+import { getProfile } from "../../actions/profileActions";
 
 import { Link } from "react-router-dom";
 import Loading from "../loading/Loading";
 const ProfilePosts = ({
   auth,
   post,
-
   profile: { profile, loading },
-
   getProfile,
   history,
 }) => {
@@ -45,8 +39,6 @@ ProfilePosts.propTypes = {
   post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
-
-  // history: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({

@@ -45,8 +45,8 @@ const EditPost = ({
     editedPost.append("caption", caption);
 
     updatePost(editedPost);
-    getPost(id);
-    history.push(`/edit-post/${id}`);
+    // getPost(id);
+    history.push(`/`);
   };
 
   return (

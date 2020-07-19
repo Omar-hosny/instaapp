@@ -17,7 +17,7 @@ export default (state = initialState, action) => {
     case "CREATE_POST":
       return {
         ...state,
-        posts: [action.payload, ...state.posts],
+        posts: [...state.posts, action.payload],
         loading: false,
       };
     case "GET_POSTS":
@@ -38,6 +38,7 @@ export default (state = initialState, action) => {
         posts: state.posts.map((post) =>
           post._id === action.payload._id ? action.payload : post
         ),
+        current: action.payload,
         loading: false,
       };
     case "DELETE_POST":

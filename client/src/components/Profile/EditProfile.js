@@ -125,13 +125,13 @@ EditProfile.propTypes = {
   editProfile: PropTypes.func.isRequired,
   getProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  history: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   profile: state.profile,
 });
 
-export default connect(mapStateToProps, { editProfile, getProfile })(
-  withRouter(EditProfile)
+export default withRouter(
+  connect(mapStateToProps, { editProfile, getProfile })(EditProfile)
 );

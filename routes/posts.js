@@ -249,10 +249,10 @@ router.delete("/:id", verify, async (req, res) => {
 // @desc    Add a comment
 // @route   POST /api/posts/comment/:id => ID of the post
 // @access  Private
-router.post("/comment/:id", verify, async (req, res) => {
+router.put("/comment/:id", verify, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
-    const post = await Post.findById(req.params.id);
+    let user = await User.findById(req.user.id);
+    let post = await Post.findById(req.params.id);
 
     const text = req.body.text;
     if (!text) {
@@ -266,11 +266,19 @@ router.post("/comment/:id", verify, async (req, res) => {
       user: req.user.id,
     };
 
-    post.comments.unshift(newComment);
+    // post.comments.unshift(newComment);
+    post = await Post.findByIdAndUpdate(
+      req.params.id,
+      { $push: { comments: newComment } },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     await post.save();
 
-    res.json(post.comments);
+    res.json(post);
     // console.log(user);
   } catch (err) {
     console.error(err.message);
@@ -283,20 +291,20 @@ router.post("/comment/:id", verify, async (req, res) => {
 // @access  Private
 router.put("/comment/:id/:comment_id", verify, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
-    const post = await Post.findById(req.params.id);
+    let user = await User.findById(req.user.id);
+    let post = await Post.findById(req.params.id);
 
     // pull out the comment
     const comment = post.comments.find(
       (comment) => comment.id === req.params.comment_id
     );
 
-    // console.log(comment);
     // make sure comment exist
     if (!comment) {
       return res.status(404).send("Comment does not exist");
     }
 
+    // console.log(comment.name);
     // check user Owner of the comment
     if (comment.user.toString() !== user.id) {
       return res.status(401).send("User unauthorized!");
@@ -315,14 +323,25 @@ router.put("/comment/:id/:comment_id", verify, async (req, res) => {
     };
 
     // update the comment
-    post.comments = post.comments.map((oldComment) =>
-      oldComment.id === req.params.comment_id
-        ? (oldComment = newComment)
-        : oldComment
+    // post.comments = post.comments.map((oldComment) =>
+    //   oldComment.id === req.params.comment_id
+    //     ? (oldComment = newComment)
+    //     : oldComment
+    // );
+
+    // Update the comment in comments array in Post model
+    // hint to remember here is comments._id => comments : comments array & _id is id of the comment that ia want to update
+    post = await Post.findOneAndUpdate(
+      { _id: req.params.id, "comments._id": req.params.comment_id },
+      { $set: { "comments.$.text": text } }, // select text from comment to update to new one
+      {
+        runValidators: true,
+        new: true,
+      }
     );
 
-    await post.save();
-    res.json(post.comments);
+    // await post.save();
+    res.send(post);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error.");
@@ -331,8 +350,8 @@ router.put("/comment/:id/:comment_id", verify, async (req, res) => {
 
 router.delete("/comment/:id/:comment_id", verify, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
-    const post = await Post.findById(req.params.id);
+    let user = await User.findById(req.user.id);
+    let post = await Post.findById(req.params.id);
 
     // pull out the comment
     const comment = post.comments.find(
@@ -350,12 +369,21 @@ router.delete("/comment/:id/:comment_id", verify, async (req, res) => {
       return res.status(401).send("User unauthorized!");
     }
 
-    post.comments = post.comments.filter(
-      ({ id }) => id !== req.params.comment_id
+    // post.comments = post.comments.filter(
+    //   ({ id }) => id !== req.params.comment_id
+    // );
+
+    post = await Post.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { comments: comment } },
+      {
+        new: true,
+        runValidators: true,
+      }
     );
 
     await post.save();
-    res.json(post.comments);
+    res.json(post);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error.");

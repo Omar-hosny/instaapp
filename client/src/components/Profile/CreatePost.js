@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+// import { useParams, useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getPosts, createPost } from "../../actions/postActions";
 import Modal from "../Modal";
+
 const CreatePost = ({
   auth,
   post,
@@ -13,7 +14,7 @@ const CreatePost = ({
 }) => {
   const [error, setError] = useState("");
 
-  const { id } = useParams();
+  // const { id } = useParams();
   const [caption, setCaption] = useState("");
   const [file, setFile] = useState("");
   const [fileName, setFileName] = useState("Choose photo");
@@ -31,7 +32,7 @@ const CreatePost = ({
     formData.append("file", file);
     formData.append("caption", caption);
     createPost(formData);
-    history.push(`/profile/${id}`);
+    history.push("/");
     // window.location.reload(false);
   };
 
@@ -98,7 +99,7 @@ CreatePost.propTypes = {
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
 
-  // history: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

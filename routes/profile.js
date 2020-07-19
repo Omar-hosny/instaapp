@@ -113,6 +113,11 @@ router.put("/edit/:id", verify, async (req, res) => {
       body.bio = req.body.bio;
     }
 
+    user = await User.findByIdAndUpdate(req.params.id, body, {
+      new: true,
+      runValidators: true,
+    });
+
     // update each post of user with his updated avatar and name and email
     const ps = await Post.updateMany({ userId: req.user._id }, p, {
       new: true,
@@ -126,10 +131,10 @@ router.put("/edit/:id", verify, async (req, res) => {
     //   runValidators: true,
     // });
 
-    user = await User.findByIdAndUpdate(req.params.id, body, {
-      new: true,
-      runValidators: true,
-    });
+    // user = await User.findByIdAndUpdate(req.params.id, body, {
+    //   new: true,
+    //   runValidators: true,
+    // });
 
     // update user obj in user posts array
     user.posts.map((post) => (post.user = p.user));

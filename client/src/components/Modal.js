@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { withRouter } from "react-router-dom";
 
 const Modal = (props) => {
   return (
@@ -47,4 +48,4 @@ const Modal = (props) => {
   );
 };
 
-export default Modal;
+export default withRouter(Modal);

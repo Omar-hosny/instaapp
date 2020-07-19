@@ -96,6 +96,62 @@ export const deletePost = (id) => async (dispatch) => {
   }
 };
 
+// Add a Comment
+export const addComment = (postId, commentData) => async (dispatch) => {
+  // const config = {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // };
+  try {
+    setLoading();
+    const res = await axios.put(`/api/posts/comment/${postId}`, commentData);
+    dispatch({
+      type: "UPDATE_POST",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "GET_ERRORS",
+      payload: err.response.data,
+    });
+  }
+};
+
+// Delete Comment
+export const deleteComment = (postId, commentId) => async (dispatch) => {
+  try {
+    setLoading();
+    const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
+    dispatch({
+      type: "UPDATE_POST",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "GET_ERRORS",
+      payload: err.response.data,
+    });
+  }
+};
+
+// Delete Comment
+export const updateComment = (postId, commentId) => async (dispatch) => {
+  try {
+    setLoading();
+    const res = await axios.put(`/api/posts/comment/${postId}/${commentId}`);
+    dispatch({
+      type: "UPDATE_POST",
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "GET_ERRORS",
+      payload: err.response.data,
+    });
+  }
+};
+
 // Like post
 export const likePost = (id) => async (dispatch) => {
   try {

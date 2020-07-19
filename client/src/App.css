@@ -145,3 +145,49 @@ body {
   margin: auto;
   margin-top: 100px;
 }
+
+.comment-area {
+  display: flex;
+}
+
+.comment-area .comment-btn {
+  height: inherit;
+  width: 3rem;
+  background: inherit;
+  border: none;
+  outline: none;
+}
+/* .comment-area .comment-btn:focus {
+  width: 3rem;
+  background: inherit;
+  border: none;
+} */
+
+.comment-area .comment {
+  height: 2.5rem;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  outline: none;
+  background: inherit;
+}
+/* input:focus {
+  border: none;
+  outline: 0;
+} */
+
+.comment-item {
+  display: flex;
+  justify-content: start;
+}
+
+.comment-item i {
+  cursor: pointer;
+  margin-left: auto;
+  font-size: 13px;
+}
+
+.comment-name {
+  margin-right: 7px;
+  font-weight: 600;
+}
