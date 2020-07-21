@@ -178,7 +178,7 @@ body {
 
 .comment-item {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .comment-item i {
@@ -190,4 +190,8 @@ body {
 .comment-name {
   margin-right: 7px;
   font-weight: 600;
+}
+
+.create {
+  margin-top: 5vh;
 }

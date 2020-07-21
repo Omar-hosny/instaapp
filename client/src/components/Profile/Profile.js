@@ -12,9 +12,9 @@ import {
 import ProfilePosts from "./ProfilePosts";
 
 import BIO from "./BIO";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Loading from "../loading/Loading";
-import CreatePost from "./CreatePost";
+import CreatePost from "../post/CreatePost";
 
 const Profile = ({
   auth,
@@ -57,8 +57,12 @@ const Profile = ({
         <BIO />
       </div>
 
-      {/*  create post modal */}
-      <CreatePost />
+      {/*  create post link */}
+      {id === auth.user._id ? (
+        <Link className="btn btn-primary ml-3" to="/create-post">
+          Add post
+        </Link>
+      ) : null}
 
       {/* <!-- show posts that user made --> */}
       <ProfilePosts />

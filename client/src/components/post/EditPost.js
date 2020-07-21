@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getPost, updatePost } from "../actions/postActions";
+import { getPost, updatePost } from "../../actions/postActions";
 import { useParams, Link } from "react-router-dom";
-import Modal from "./Modal";
+import Modal from "../Modal";
 
 const EditPost = ({
   auth,

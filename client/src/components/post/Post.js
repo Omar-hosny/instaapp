@@ -9,7 +9,7 @@ import {
   deleteComment,
   likePost,
   unLikePost,
-} from "../actions/postActions";
+} from "../../actions/postActions";
 import { Link } from "react-router-dom";
 // import classnames from "classnames";
 

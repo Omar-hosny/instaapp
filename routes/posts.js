@@ -12,7 +12,7 @@ const User = require("../models/User");
 // @route   POST /api/posts
 // @access  Private
 router.post("/", verify, async (req, res) => {
-  const user = await User.findById(req.user.id);
+  let user = await User.findById(req.user.id);
   // Set user to user. _id
   req.body.userId = req.user.id;
   // set post name to post Owner which is req.user.name
@@ -28,8 +28,21 @@ router.post("/", verify, async (req, res) => {
       return res.status(400).send("No Photo uploaded");
     }
 
-    // save the photo
-    const file = req.files.file;
+    if (req.files) {
+      // save the photo
+      const file = req.files.file;
+
+      file.mv(`client/public/uploads/${file.name}`, (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send(err);
+        }
+        // res.json({ fileName: file.name, photoPath: `/uploads/${file.name}` });
+      });
+
+      // make the photo : name of file
+      req.body.photo = file.name;
+    }
 
     // path for a photo
     // file.mv(`uploads/${file.name}`, err => {
@@ -39,14 +52,6 @@ router.post("/", verify, async (req, res) => {
     //   }
     //   // res.json({ fileName: file.name, photoPath: `/uploads/${file.name}` });
     // });
-
-    file.mv(`client/public/uploads/${file.name}`, (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      }
-      // res.json({ fileName: file.name, photoPath: `/uploads/${file.name}` });
-    });
 
     // file.mv(`${__dirname}/${__dirname}/uploads/${file.name}`, err => {
     //   if (err) {
@@ -58,19 +63,21 @@ router.post("/", verify, async (req, res) => {
 
     // const { caption } = req.body;
 
-    // const post = await Post.create({
-    //   photo: file.name,
-    //   caption
-    // });
-
-    // make the photo : name of file
-    req.body.photo = file.name;
-
     const post = await Post.create(req.body);
+    // let post = new Post(req.body);
 
     const newPost = post;
-    user.posts.unshift(newPost);
-    await user.save();
+    // user.posts.unshift(newPost);
+    // await user.save();
+
+    user = await User.findByIdAndUpdate(
+      req.user.id,
+      { $push: { posts: newPost } },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     // console.log(posts);
     res.status(200).json({

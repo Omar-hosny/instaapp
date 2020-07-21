@@ -6,7 +6,7 @@ import {
   addComment,
   deleteComment,
   updateComment,
-} from "../actions/postActions";
+} from "../../actions/postActions";
 
 const Comment = ({
   auth,
@@ -42,7 +42,7 @@ const Comment = ({
           value={text}
           onChange={onChange}
           name="text"
-          placeholder="Add a comment"
+          placeholder="Add a comment..."
         />
         <input type="submit" className="comment-btn" value="Post" />
       </div>

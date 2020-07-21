@@ -11,10 +11,11 @@ import { Provider } from "react-redux";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Profile from "./components/Profile/Profile";
-import EditPost from "./components/EditPost";
+import EditPost from "./components/post/EditPost";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/authActions";
 import EditProfile from "./components/Profile/EditProfile";
+import CreatePost from "./components/post/CreatePost";
 
 // keep user logged in unless he logged out
 if (localStorage.token) {
@@ -37,6 +38,8 @@ const App = () => {
             <PrivateRoute exact path="/edit-post/:id" component={EditPost} />
 
             <PrivateRoute exact path="/profile/:id" component={Profile} />
+            <PrivateRoute exact path="/create-post" component={CreatePost} />
+
             <PrivateRoute
               exact
               path="/profile/edit/:id"

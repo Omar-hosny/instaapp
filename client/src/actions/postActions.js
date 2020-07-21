@@ -81,18 +81,20 @@ export const updatePost = (postData) => async (dispatch) => {
 
 // Delete post
 export const deletePost = (id) => async (dispatch) => {
-  try {
-    setLoading();
-    await axios.delete(`/api/posts/${id}`);
-    dispatch({
-      type: "DELETE_POST",
-      payload: id,
-    });
-  } catch (err) {
-    dispatch({
-      type: "GET_ERRORS",
-      payload: err.response.data,
-    });
+  if (window.confirm("Are you sure you want to delete this post?")) {
+    try {
+      setLoading();
+      await axios.delete(`/api/posts/${id}`);
+      dispatch({
+        type: "DELETE_POST",
+        payload: id,
+      });
+    } catch (err) {
+      dispatch({
+        type: "GET_ERRORS",
+        payload: err.response.data,
+      });
+    }
   }
 };
 
