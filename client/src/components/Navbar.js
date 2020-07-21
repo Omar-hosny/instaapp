@@ -12,7 +12,7 @@ const Navbar = ({ auth: { user, isAuthenticated }, logout }) => {
     <ul className="navbar-nav ml-auto">
       <li className="nav-item">
         <Link className="nav-link" to="/">
-          <i className="fa fa-home"></i> Home
+          <i className="fa fa-home"></i>
         </Link>
       </li>
       {/* ToDo profile link */}
@@ -26,12 +26,13 @@ const Navbar = ({ auth: { user, isAuthenticated }, logout }) => {
           className="nav-link"
           to={user !== null ? `/profile/${user._id}` : ""}
         >
-          <i className="fa fa-user"></i> {user ? user.name : null}
+          <i className="fa fa-user"></i>
         </Link>
       </li>
       <li className="nav-item">
         <Link className="nav-link" to="/login" onClick={logoutUser}>
-          <i className="fa fa-user"></i> logout
+          {/* <i className="fa fa-arrow-right"></i> logout */}
+          logout
         </Link>
       </li>
     </ul>
