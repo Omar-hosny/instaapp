@@ -38,11 +38,11 @@ const CreatePost = ({
       setErrors("Please upload a photo.");
       clearError();
     } else {
-      const formData = new FormData();
+      let formData = new FormData();
       formData.append("file", file);
       formData.append("caption", caption);
       createPost(formData);
-      history.push("/");
+      history.push(`/profile/${auth.user._id}`);
       // window.location.reload(false);
     }
   };

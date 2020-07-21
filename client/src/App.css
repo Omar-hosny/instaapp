@@ -195,3 +195,18 @@ body {
 .create {
   margin-top: 5vh;
 }
+
+.photo-login {
+  width: 100%;
+}
+
+.not_login {
+  margin-top: 1rem;
+}
+.not_login span {
+  color: gray;
+}
+.not_login_link:hover {
+  text-decoration: none;
+  color: blue;
+}

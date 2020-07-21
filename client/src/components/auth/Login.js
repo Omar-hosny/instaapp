@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
+import Hey from "./photos/hey-email.svg";
 
 const Login = ({ auth: { error, isAuthenticated }, loginUser, history }) => {
   useEffect(() => {
@@ -55,7 +57,10 @@ const Login = ({ auth: { error, isAuthenticated }, loginUser, history }) => {
     <div className="layout">
       <div className="container">
         <div className="row">
-          <div className="col-md-5  mx-auto mt-5">
+          <div className="col-md-6">
+            <img src={Hey} alt="photo" className="photo-login" />
+          </div>
+          <div className="col-md-4 ml-auto mt-5">
             <h1 className="text-center">Login</h1>
             {errors ? <div className="alert alert-danger">{errors}</div> : null}
             <form onSubmit={onSubmit}>
@@ -84,8 +89,14 @@ const Login = ({ auth: { error, isAuthenticated }, loginUser, history }) => {
               <input
                 type="submit"
                 value="Login"
-                className="btn btn-dark btn-block"
+                className="btn btn-secondary "
               />
+              <div className="not_login">
+                <span>Dont't have an account?</span>{" "}
+                <Link className="not_login_link ml-2" to="/register">
+                  Register
+                </Link>
+              </div>
             </form>
           </div>
         </div>
