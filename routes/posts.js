@@ -27,22 +27,8 @@ router.post("/", verify, async (req, res) => {
     if (req.files === null) {
       return res.status(400).send("No Photo uploaded");
     }
-
-    if (req.files) {
-      // save the photo
-      const file = req.files.file;
-
-      file.mv(`client/public/uploads/${file.name}`, (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).send(err);
-        }
-        // res.json({ fileName: file.name, photoPath: `/uploads/${file.name}` });
-      });
-
-      // make the photo : name of file
-      req.body.photo = file.name;
-    }
+    // save the photo
+    const file = req.files.file;
 
     // path for a photo
     // file.mv(`uploads/${file.name}`, err => {
@@ -53,6 +39,14 @@ router.post("/", verify, async (req, res) => {
     //   // res.json({ fileName: file.name, photoPath: `/uploads/${file.name}` });
     // });
 
+    file.mv(`client/public/uploads/${file.name}`, (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send(err);
+      }
+      // res.json({ fileName: file.name, photoPath: `/uploads/${file.name}` });
+    });
+
     // file.mv(`${__dirname}/${__dirname}/uploads/${file.name}`, err => {
     //   if (err) {
     //     console.error(err);
@@ -62,6 +56,10 @@ router.post("/", verify, async (req, res) => {
     // });
 
     // const { caption } = req.body;
+
+
+    // make the photo : name of file
+    req.body.photo = file.name;
 
     const post = await Post.create(req.body);
     // let post = new Post(req.body);

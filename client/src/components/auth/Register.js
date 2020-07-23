@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import Hey from "./photos/hey-email.svg";
 
-const Register = ({ auth: { error }, registerUser }) => {
+const Register = ({ auth: { error }, registerUser, history }) => {
   useEffect(() => {
     if (error !== null) {
       setErrors(error);
@@ -50,6 +50,7 @@ const Register = ({ auth: { error }, registerUser }) => {
         email: "",
         password: "",
       });
+      history.push("/login");
     }
   };
 
