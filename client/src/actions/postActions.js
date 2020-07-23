@@ -27,7 +27,7 @@ export const createPost = (postData) => async (dispatch) => {
 
   try {
     setLoading();
-    const res = await axios.put("/api/posts", postData);
+    const res = await axios.put("/api/posts", postData, config);
     // dispatch({
     //   type: "GET_PROFILE",
     //   // payload: res.data.data,
@@ -66,7 +66,7 @@ export const updatePost = (postData) => async (dispatch) => {
   };
   try {
     setLoading();
-    const res = await axios.put(`/api/posts/${postData._id}`, postData);
+    const res = await axios.put(`/api/posts/${postData._id}`, postData, config);
     dispatch({
       type: "UPDATE_POST",
       payload: res.data.data,
