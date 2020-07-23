@@ -11,7 +11,7 @@ const User = require("../models/User");
 // @desc    Create Post
 // @route   POST /api/posts
 // @access  Private
-router.post("/", verify, async (req, res) => {
+router.put("/", verify, async (req, res) => {
   let user = await User.findById(req.user.id);
   // Set user to user. _id
   req.body.userId = req.user.id;
@@ -56,7 +56,6 @@ router.post("/", verify, async (req, res) => {
     // });
 
     // const { caption } = req.body;
-
 
     // make the photo : name of file
     req.body.photo = file.name;

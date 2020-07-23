@@ -27,11 +27,11 @@ export const createPost = (postData) => async (dispatch) => {
 
   try {
     setLoading();
-    const res = await axios.post("/api/posts", postData, config);
-    dispatch({
-      type: "CREATE_POST",
-      payload: res.data.data,
-    });
+    const res = await axios.put("/api/posts", postData);
+    // dispatch({
+    //   type: "GET_PROFILE",
+    //   // payload: res.data.data,
+    // });
   } catch (err) {
     dispatch({
       type: "GET_ERRORS",
@@ -66,7 +66,7 @@ export const updatePost = (postData) => async (dispatch) => {
   };
   try {
     setLoading();
-    const res = await axios.put(`/api/posts/${postData._id}`, postData, config);
+    const res = await axios.put(`/api/posts/${postData._id}`, postData);
     dispatch({
       type: "UPDATE_POST",
       payload: res.data.data,

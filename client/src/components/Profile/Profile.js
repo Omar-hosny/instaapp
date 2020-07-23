@@ -65,7 +65,7 @@ const Profile = ({
       ) : null}
 
       {/* <!-- show posts that user made --> */}
-      <ProfilePosts />
+      <ProfilePosts profile={profile} />
     </div>
   );
 };

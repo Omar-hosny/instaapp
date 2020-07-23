@@ -14,12 +14,12 @@ export default (state = initialState, action) => {
         ...state,
         loading: true,
       };
-    case "CREATE_POST":
-      return {
-        ...state,
-        posts: [...state.posts, action.payload],
-        loading: false,
-      };
+    // case "CREATE_POST":
+    //   return {
+    //     ...state,
+    //     posts: state.posts,
+    //     loading: false,
+    //   };
     case "GET_POSTS":
       return {
         ...state,

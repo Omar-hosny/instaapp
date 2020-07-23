@@ -46,7 +46,7 @@ const EditPost = ({
 
     updatePost(editedPost);
     // getPost(id);
-    history.push(`/`);
+    // history.push(`/edit-post/${id}`);
   };
 
   return (

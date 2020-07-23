@@ -8,16 +8,9 @@ import { getProfile } from "../../actions/profileActions";
 import { Link } from "react-router-dom";
 import Loading from "../loading/Loading";
 const ProfilePosts = ({
-  auth,
-  post,
-  profile: { profile, loading },
-  getProfile,
-  history,
+  // profile: { profile, loading },
+  profile,
 }) => {
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
     <div className="row mt-5">
       {profile.posts &&
@@ -33,18 +26,18 @@ const ProfilePosts = ({
 };
 
 ProfilePosts.propTypes = {
-  getPosts: PropTypes.func.isRequired,
-  getProfile: PropTypes.func.isRequired,
-  createPost: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired,
+  // getPosts: PropTypes.func.isRequired,
+  // getProfile: PropTypes.func.isRequired,
+  // createPost: PropTypes.func.isRequired,
+  // post: PropTypes.object.isRequired,
+  // auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   post: state.post,
   auth: state.auth,
-  profile: state.profile,
+  // profile: state.profile,
 });
 
 export default connect(mapStateToProps, {

@@ -30,7 +30,7 @@ export default (state = initialState, action) => {
       // console.log(action.payload.name);
       return {
         ...state,
-        // profile: [state.profile.followers === action.payload],
+        // profile: state.profile.followers = action.payload.followers,
         profile: action.payload,
         loading: false,
       };
