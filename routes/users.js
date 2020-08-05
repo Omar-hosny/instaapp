@@ -153,7 +153,6 @@ router.post("/login", async (req, res) => {
 //     res.status(400).send("Server Error..");
 //   }
 // });
-
 router.put("/follow/:id", verify, async (req, res) => {
   try {
     let user1 = await User.findById(req.params.id); // the user i want to follow
@@ -286,6 +285,28 @@ router.put("/unfollow/:id", verify, async (req, res) => {
     res.status(200).send(user1);
   } catch (err) {
     res.status(400).send("Server Error...");
+  }
+});
+
+// @desc    Get all users
+// @route   GET /api/users
+// @access  Public
+router.get("/", async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
+    if (!users) {
+      return res.status(404).json("No users found!");
+    }
+
+    // let usersNames = users.map((user) => user.name);
+
+    res.status(200).json({
+      count: users.length,
+      data: users,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(400).send("Server Error ..");
   }
 });
 

@@ -2,8 +2,8 @@ import axios from "axios";
 
 // Get profile by id
 export const getProfile = (id) => async (dispatch) => {
-  setLoading();
   try {
+    dispatch(setLoading());
     const res = await axios.get(`/api/profile/${id}`);
     dispatch({
       type: "GET_PROFILE",
@@ -26,7 +26,7 @@ export const editProfile = (profileData) => async (dispatch) => {
   };
 
   try {
-    setLoading();
+    dispatch(setLoading());
     const res = await axios.put(
       `/api/profile/edit/${profileData.id}`,
       profileData,
@@ -69,6 +69,22 @@ export const unFollowUser = (id) => async (dispatch) => {
     dispatch({
       type: "UNFOLLOW_USER",
       payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "GET_PROFILE_ERRORS",
+      payload: err.response.data,
+    });
+  }
+};
+
+export const getUsers = () => async (dispatch) => {
+  setLoading();
+  try {
+    const res = await axios.get(`/api/users`);
+    dispatch({
+      type: "GET_USERS",
+      payload: res.data.data,
     });
   } catch (err) {
     dispatch({

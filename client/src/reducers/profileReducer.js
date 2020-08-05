@@ -4,12 +4,17 @@ const initialState = {
   profile: {},
   // isAuthenticated: false,
   loading: false,
-  // user: null,s
+  users: null,
   error: null,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case "SET_LOADING":
+      return {
+        ...state,
+        loading: true,
+      };
     case "GET_PROFILE":
       return {
         ...state,
@@ -30,7 +35,7 @@ export default (state = initialState, action) => {
       // console.log(action.payload.name);
       return {
         ...state,
-        // profile: state.profile.followers = action.payload.followers,
+        // profile: [state.profile.followers === action.payload],
         profile: action.payload,
         loading: false,
       };
@@ -39,6 +44,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         profile: action.payload,
+        loading: false,
+      };
+    case "GET_USERS":
+      return {
+        ...state,
+        users: action.payload,
         loading: false,
       };
     case "GET_PROFILE_ERRORS":

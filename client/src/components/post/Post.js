@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import Comment from "./Comment";
 import { connect } from "react-redux";
@@ -55,10 +55,10 @@ const Post = ({
   };
 
   return (
-    <div className="container">
+    <div>
       {posts.map((postItem) => (
-        <div className="row" key={postItem._id}>
-          <div className="post-item mx-auto mt-5" key={postItem._id}>
+        <div className="" key={postItem._id}>
+          <div className=" mt-5" key={postItem._id}>
             <div className="card">
               <div className="card-header">
                 <img
@@ -100,7 +100,13 @@ const Post = ({
               </div>
               <div className="post-body">
                 <img
-                  src={`/uploads/${postItem.photo}`}
+                  src={
+                    postItem.photo ? (
+                      `/uploads/${postItem.photo}`
+                    ) : (
+                      <h3>couldn't load the image..</h3>
+                    )
+                  }
                   alt=""
                   className="post-photo"
                 />
@@ -109,6 +115,7 @@ const Post = ({
                     <div>
                       <i
                         className="fa fa-heart fa-lg"
+                        style={{ color: "red" }}
                         onClick={() => onUnLike(postItem._id)}
                       ></i>
                       <p>{postItem.likes.length} liked</p>

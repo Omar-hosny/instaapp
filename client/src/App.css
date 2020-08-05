@@ -211,3 +211,59 @@ body {
   text-decoration: none;
   color: blue;
 }
+
+.home-items {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.avatar_suggestion {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.auth_suggestion {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  max-width: 100px;
+}
+
+.suggestion_users {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.avatar_suggestion_users {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+.suggest_follow {
+  background-color: blue; /* Green */
+  border: none;
+  color: white;
+  padding: 3px 7px;
+  font-family: sans-serif;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  /* margin: 4px 2px; */
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.suggest_follow {
+  background-color: white;
+  color: black;
+  /* border: 1px solid #1f221f; */
+}
+.suggest_follow:hover {
+  background-color: blue;
+  color: white;
+}

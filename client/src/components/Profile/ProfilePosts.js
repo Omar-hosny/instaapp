@@ -7,10 +7,10 @@ import { getProfile } from "../../actions/profileActions";
 
 import { Link } from "react-router-dom";
 import Loading from "../loading/Loading";
-const ProfilePosts = ({
-  // profile: { profile, loading },
-  profile,
-}) => {
+const ProfilePosts = ({ profile: { profile, loading } }) => {
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
   return (
     <div className="row mt-5">
       {profile.posts &&
@@ -37,7 +37,7 @@ ProfilePosts.propTypes = {
 const mapStateToProps = (state) => ({
   post: state.post,
   auth: state.auth,
-  // profile: state.profile,
+  profile: state.profile,
 });
 
 export default connect(mapStateToProps, {

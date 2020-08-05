@@ -53,6 +53,7 @@ export default (state = initialState, action) => {
         posts: state.posts.map((post) =>
           post._id === action.payload._id ? action.payload : post
         ),
+        loading: false,
       };
     case "UNLIKE_POST":
       return {
@@ -60,12 +61,14 @@ export default (state = initialState, action) => {
         posts: state.posts.map((post) =>
           post._id === action.payload._id ? action.payload : post
         ),
+        loading: false,
       };
     case "GET_ERRORS":
       return {
         ...state,
         loading: false,
         error: action.payload,
+        loading: false,
       };
     default:
       return state;

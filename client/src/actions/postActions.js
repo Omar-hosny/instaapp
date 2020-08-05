@@ -3,7 +3,7 @@ import axios from "axios";
 // Get posts from DB
 export const getPosts = () => async (dispatch) => {
   try {
-    setLoading();
+    dispatch(setLoading());
     const res = await axios.get("/api/posts");
     dispatch({
       type: "GET_POSTS",
@@ -26,7 +26,7 @@ export const createPost = (postData) => async (dispatch) => {
   };
 
   try {
-    setLoading();
+    dispatch(setLoading());
     const res = await axios.put("/api/posts", postData, config);
     // dispatch({
     //   type: "GET_PROFILE",
@@ -43,7 +43,7 @@ export const createPost = (postData) => async (dispatch) => {
 // Get post by ID
 export const getPost = (id) => async (dispatch) => {
   try {
-    setLoading();
+    dispatch(setLoading());
     const res = await axios.get(`/api/posts/${id}`);
     dispatch({
       type: "GET_POST",
@@ -65,7 +65,7 @@ export const updatePost = (postData) => async (dispatch) => {
     },
   };
   try {
-    setLoading();
+    dispatch(setLoading());
     const res = await axios.put(`/api/posts/${postData._id}`, postData, config);
     dispatch({
       type: "UPDATE_POST",
@@ -83,7 +83,7 @@ export const updatePost = (postData) => async (dispatch) => {
 export const deletePost = (id) => async (dispatch) => {
   if (window.confirm("Are you sure you want to delete this post?")) {
     try {
-      setLoading();
+      dispatch(setLoading());
       await axios.delete(`/api/posts/${id}`);
       dispatch({
         type: "DELETE_POST",
@@ -106,7 +106,7 @@ export const addComment = (postId, commentData) => async (dispatch) => {
   //   },
   // };
   try {
-    setLoading();
+    // dispatch(setLoading());
     const res = await axios.put(`/api/posts/comment/${postId}`, commentData);
     dispatch({
       type: "UPDATE_POST",
@@ -123,7 +123,7 @@ export const addComment = (postId, commentData) => async (dispatch) => {
 // Delete Comment
 export const deleteComment = (postId, commentId) => async (dispatch) => {
   try {
-    setLoading();
+    // dispatch(setLoading());
     const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
     dispatch({
       type: "UPDATE_POST",
@@ -140,7 +140,7 @@ export const deleteComment = (postId, commentId) => async (dispatch) => {
 // Delete Comment
 export const updateComment = (postId, commentId) => async (dispatch) => {
   try {
-    setLoading();
+    // dispatch(setLoading());
     const res = await axios.put(`/api/posts/comment/${postId}/${commentId}`);
     dispatch({
       type: "UPDATE_POST",
@@ -157,7 +157,7 @@ export const updateComment = (postId, commentId) => async (dispatch) => {
 // Like post
 export const likePost = (id) => async (dispatch) => {
   try {
-    setLoading();
+    // dispatch(setLoading());
     const res = await axios.put(`/api/posts/like/${id}`); // <= id of the post
     dispatch({
       type: "LIKE_POST",
@@ -174,7 +174,7 @@ export const likePost = (id) => async (dispatch) => {
 // unLike post
 export const unLikePost = (id) => async (dispatch) => {
   try {
-    setLoading();
+    // dispatch(setLoading());
     const res = await axios.put(`/api/posts/unlike/${id}`); // <= id of the post
     dispatch({
       type: "UNLIKE_POST",

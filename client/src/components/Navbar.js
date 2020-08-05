@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -9,33 +9,39 @@ const Navbar = ({ auth: { user, isAuthenticated }, logout }) => {
   };
 
   const authLinks = (
-    <ul className="navbar-nav ml-auto">
-      <li className="nav-item">
-        <Link className="nav-link" to="/">
-          <i className="fa fa-home"></i>
-        </Link>
-      </li>
-      {/* ToDo profile link */}
-      {/* <li className="nav-item">
+    <Fragment>
+      <div className="navbar nav ml-auto">
+        <input type="text" className="form-control" placeholder="Search..." />
+      </div>
+
+      <ul className="navbar-nav ml-auto">
+        <li className="nav-item">
+          <Link className="nav-link" to="/">
+            <i className="fa fa-home"></i>
+          </Link>
+        </li>
+        {/* ToDo profile link */}
+        {/* <li className="nav-item">
               <Link className="nav-link" to="/profile">
                 <i className="fa fa-user"></i> profile
               </Link>
             </li> */}
-      <li className="nav-item">
-        <Link
-          className="nav-link"
-          to={user !== null ? `/profile/${user._id}` : ""}
-        >
-          <i className="fa fa-user"></i>
-        </Link>
-      </li>
-      <li className="nav-item">
-        <Link className="nav-link" to="/login" onClick={logoutUser}>
-          {/* <i className="fa fa-arrow-right"></i> logout */}
-          logout
-        </Link>
-      </li>
-    </ul>
+        <li className="nav-item">
+          <Link
+            className="nav-link"
+            to={user !== null ? `/profile/${user._id}` : ""}
+          >
+            <i className="fa fa-user"></i>
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/login" onClick={logoutUser}>
+            {/* <i className="fa fa-arrow-right"></i> logout */}
+            logout
+          </Link>
+        </li>
+      </ul>
+    </Fragment>
   );
 
   const guestLinks = (
