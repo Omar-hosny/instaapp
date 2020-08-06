@@ -14,7 +14,7 @@ import ProfilePosts from "./ProfilePosts";
 import BIO from "./BIO";
 import { useParams, Link } from "react-router-dom";
 import Loading from "../loading/Loading";
-import CreatePost from "../post/CreatePost";
+// import CreatePost from "../post/CreatePost";
 
 const Profile = ({
   auth,

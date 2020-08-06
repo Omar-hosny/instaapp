@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getUsers } from "../actions/profileActions";
@@ -87,7 +87,7 @@ const SuggestUsers = ({ auth, getUsers, profile: { users } }) => {
   //   console.log("Not included");
   // }
 
-  let indexOfUser = following && following.map((u) => u.id);
+  // let indexOfUser = following && following.map((u) => u.id);
 
   return (
     <div className="mt-5 ml-5">
@@ -96,14 +96,14 @@ const SuggestUsers = ({ auth, getUsers, profile: { users } }) => {
           <img
             src={`/uploads/avatar/${auth.user.avatar}`}
             alt="avatar"
-            className="avatar_suggestion"
+            className="avatar_suggestion mr-2"
           />
         </div>
         <div>
           <h5>{auth.user.name}</h5>
         </div>
       </div>
-      <h6 className="text-muted mt-4 ml-2 mb-3">Suggested for you</h6>
+      {/* <h6 className="text-muted mt-4 ml-2 mb-3"> </h6> */}
       {/* <div>{suggestions}</div> */}
     </div>
   );

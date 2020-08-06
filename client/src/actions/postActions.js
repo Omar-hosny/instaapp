@@ -27,7 +27,7 @@ export const createPost = (postData) => async (dispatch) => {
 
   try {
     dispatch(setLoading());
-    const res = await axios.put("/api/posts", postData, config);
+    await axios.put("/api/posts", postData, config);
     // dispatch({
     //   type: "GET_PROFILE",
     //   // payload: res.data.data,

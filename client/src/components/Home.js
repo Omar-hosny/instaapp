@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Posts from "../components/post/Posts";
 import SuggestUsers from "./SuggestUsers";
 
