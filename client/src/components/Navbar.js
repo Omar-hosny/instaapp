@@ -20,12 +20,11 @@ const Navbar = ({ auth: { user, isAuthenticated }, logout }) => {
             <i className="fa fa-home"></i>
           </Link>
         </li>
-        {/* ToDo profile link */}
-        {/* <li className="nav-item">
-              <Link className="nav-link" to="/profile">
-                <i className="fa fa-user"></i> profile
-              </Link>
-            </li> */}
+        <li className="nav-item">
+          <Link className="nav-link" to="/explore">
+            <i className="far fa-images"></i>
+          </Link>
+        </li>
         <li className="nav-item">
           <Link
             className="nav-link"

@@ -17,6 +17,7 @@ import { setCurrentUser } from "./actions/authActions";
 import EditProfile from "./components/Profile/EditProfile";
 import CreatePost from "./components/post/CreatePost";
 import Modal from "./components/Modal";
+import Explore from "./components/Explore";
 
 // keep user logged in unless he logged out
 if (localStorage.token) {
@@ -41,6 +42,7 @@ const App = () => {
 
             <PrivateRoute exact path="/profile/:id" component={Profile} />
             <PrivateRoute exact path="/create-post" component={CreatePost} />
+            <PrivateRoute exact path="/explore" component={Explore} />
 
             <PrivateRoute
               exact
