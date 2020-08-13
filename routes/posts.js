@@ -116,6 +116,44 @@ router.get("/", async (req, res) => {
   }
 });
 
+// @desc    Get follwing users posts
+// @route   Get /api/posts/feed
+// @access  Private
+router.get("/feed", verify, async (req, res) => {
+  try {
+    let user = await User.findById(req.user.id);
+    let followingPosts = await Post.find().sort({ createdAt: -1 });
+
+    const { following } = user;
+    const { posts } = user;
+
+    let idOfFollowing = following.map((f) => f.id);
+
+    // console.log(idOfFollowing);
+
+    let postsFeed;
+
+    postsFeed = followingPosts.filter(
+      (postItem) =>
+        (idOfFollowing.includes(postItem.userId) && postItem) ||
+        (postItem.userId.toString() === req.user.id.toString() && postItem)
+    );
+
+    if (postsFeed.length === 0) {
+      return res.send("No posts to show follow users to show their posts!");
+    }
+
+    res.status(200).json({
+      success: true,
+      count: postsFeed.length,
+      data: postsFeed,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(400).send("Server Error");
+  }
+});
+
 // @desc    Get Post by id
 // @route   Get /api/posts/:id
 // @access  public

@@ -8,6 +8,7 @@ import {
   deleteComment,
   likePost,
   unLikePost,
+  getFeed,
 } from "../../actions/postActions";
 import { Link } from "react-router-dom";
 // import classnames from "classnames";
@@ -20,18 +21,24 @@ const Post = ({
   unLikePost,
   deletePost,
   deleteComment,
+  getFeed,
 }) => {
   // const [showLike, setShowLike] = useState(false);
 
   useEffect(() => {
-    getPosts();
+    // getPosts();
+    getFeed();
     // eslint-disable-next-line
   }, []);
 
   if (loading) {
     return <h1 className="text-center mt-5">Loading...</h1>;
-  } else if (posts === null) {
-    return <h1 className="text-center mt-5">No posts to show!</h1>;
+  } else if (!posts) {
+    return (
+      <h3 className="text-center mt-5">
+        No posts found <br /> follow users to show their posts{" "}
+      </h3>
+    );
   }
 
   // Check if user liked the post or not
@@ -167,6 +174,7 @@ const Post = ({
 
 Post.propTypes = {
   getPosts: PropTypes.func.isRequired,
+  getFeed: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
   likePost: PropTypes.func.isRequired,
   unLikePost: PropTypes.func.isRequired,
@@ -182,6 +190,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   getPosts,
+  getFeed,
   deletePost,
   likePost,
   unLikePost,

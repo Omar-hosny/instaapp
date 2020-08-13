@@ -17,6 +17,23 @@ export const getPosts = () => async (dispatch) => {
   }
 };
 
+// Get posts from DB if user follow postOwner
+export const getFeed = () => async (dispatch) => {
+  try {
+    dispatch(setLoading());
+    const res = await axios.get("/api/posts/feed");
+    dispatch({
+      type: "GET_FEED",
+      payload: res.data.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: "GET_ERRORS",
+      payload: err.response.data,
+    });
+  }
+};
+
 // Create post
 export const createPost = (postData) => async (dispatch) => {
   const config = {

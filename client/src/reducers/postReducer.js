@@ -26,6 +26,12 @@ export default (state = initialState, action) => {
         posts: action.payload,
         loading: false,
       };
+    case "GET_FEED":
+      return {
+        ...state,
+        posts: action.payload,
+        loading: false,
+      };
     case "GET_POST":
       return {
         ...state,
